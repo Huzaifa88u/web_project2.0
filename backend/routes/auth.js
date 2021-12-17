@@ -31,6 +31,20 @@ router.post("/createblog", (req, res) => {
   });
 });
 
+
+router.get("/getblogs", (req, res) => {
+  const x = User.find(
+    (err, testData) => {
+      if (err) {
+        res.send(err);
+        console.log(err);
+      } else {
+        res.send(testData);
+      }
+    }
+  );
+});
+
 router.get("/:id/:pw", (req, res) => {
   const x = User.findOne(
     { email: req.params.id, password: req.params.pw },

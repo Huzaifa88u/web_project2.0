@@ -44,8 +44,9 @@ const Card = (props) => {
         console.error(err);
       })
       .then((r) => {
-        history.push("/blog");
-        console.log(r);
+        console.log(r.data);
+        if(r.data) history.push({pathname:"/blog",search:`?userid=${r.data._id}`});
+      
       });
   };
 

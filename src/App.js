@@ -1,18 +1,20 @@
 import './App.css';
-import PakWheels from './PakWheels';
+import PakWheels from './Blogs';
 import "./App.css";
 import Card from "./components/Card";
-import Pakwheels from "./PakWheels";
+import Blogs from "./Blogs";
 import { Route } from "react-router";
-import { BrowserRouter as Router,Switch, Redirect } from "react-router-dom";
-import Blog from './components/Blog';
+import { BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
+import CreateBlog from './components/CreateBlog';
+import Header from './components/header';
 
 
 function App(props) {
   return (
     <Router>
+      <Header />
       <Switch>
-        <Route path="/login" exact>
+        <Route path="/login">
           <Redirect to="/" />
         </Route>
         <Route path="/" exact>
@@ -21,24 +23,16 @@ function App(props) {
         <Route path="/signup">
           <Card title="Signup" />
         </Route>
-        <Route path="/Pakwheels">
+        <Route path="/Blogs">
           <div className="row">
-        <div className="col-lg-2 bg-white">
-             
-         </div>
-         <div className="col-lg-8 bg-grey">
-          <Pakwheels />
+              <Blogs />
           </div>
-          <div className="col-lg-2 bg-white">
-             
-         </div>
-         </div>
         </Route>
-        <Route path="/blog">
-          <Blog />
+        <Route path="/createblog">
+          <CreateBlog />
         </Route>
       </Switch>
-      </Router>
+    </Router>
   );
 }
 
