@@ -1,7 +1,8 @@
 var express = require("express");
 const mongoose = require("mongoose");
 const MongoClient = require("mongodb").MongoClient;
-const blog = require("../models/blog");
+const blog = require("../models/Blog");
+const User = require("../models/User");
 
 var router = express.Router();
 

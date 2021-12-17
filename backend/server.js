@@ -1,5 +1,4 @@
 const express = require("express");
-
 const cors = require("cors");
 const mongoose = require("mongoose");
 const MongoClient = require("mongodb").MongoClient;
@@ -7,9 +6,9 @@ const bodyParser = require("body-parser");
 var auth = require("./routes/auth");
 const port = 3000;
 const app = express();
-const url = "mongodb://localhost:27017/people_connect";
+const url = "mongodb://localhost:27017/blogs";
 
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "http://localhost:3001" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // issue resolved because of not proper connection

@@ -44,7 +44,7 @@ const Card = (props) => {
         console.error(err);
       })
       .then((r) => {
-        history.push("/post");
+        history.push("/blog");
         console.log(r);
       });
   };
