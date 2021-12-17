@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import {
   Collapse,
   Navbar,
@@ -10,10 +10,10 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
-} from 'reactstrap';
+  DropdownItem,
+} from "reactstrap";
 
-import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from "react-router-dom";
 
 function useQuery() {
@@ -21,37 +21,49 @@ function useQuery() {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
-export default function Header () {
+export default function Header() {
   const [isOpen, setIsOpen] = useState();
   const toggle = () => {
     setIsOpen(!isOpen);
-  }
+  };
   const history = useHistory();
-const query = useQuery();
+  const query = useQuery();
 
-  const myBlogs = () =>{
+  const myBlogs = () => {
     history.push({
-      pathname:"/myblogs",
-      search: `?userid=${query.get("userid")}`
-    })
-  }
-    return (
-      <div>
-        <Navbar color="light" light expand="md">
-          <NavbarBrand href="/">reactstrap</NavbarBrand>
-          <NavbarToggler onClick={toggle} />
-          <Collapse isOpen={isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink onClick={myBlogs}>My Blogs</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">Logout</NavLink>
-              </NavItem>
+      pathname: "/myblogs",
+      search: `?userid=${query.get("userid")}&myblogs=${true}`,
+    });
+  };
 
-            </Nav>
-          </Collapse>
-        </Navbar>
-      </div>
-    );
-    }
+  const handleCreateBlogs = () => {
+    history.push({
+      pathname: "/createblog",
+      search: `?userid=${query.get("userid")}`,
+    });
+  };
+
+  return (
+    <div>
+      <Navbar color="light" light expand="md">
+        <NavbarBrand href="/">reactstrap</NavbarBrand>
+        <NavbarToggler onClick={toggle} />
+        <Collapse isOpen={isOpen} navbar>
+          <Nav className="ml-auto" navbar>
+            <NavItem>
+              <NavLink onClick={handleCreateBlogs}>Create Blogs</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={myBlogs}>My Blogs</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink href="https://github.com/reactstrap/reactstrap">
+                Logout
+              </NavLink>
+            </NavItem>
+          </Nav>
+        </Collapse>
+      </Navbar>
+    </div>
+  );
+}

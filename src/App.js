@@ -1,15 +1,14 @@
-import './App.css';
-import PakWheels from './components/Blogs';
+import "./App.css";
+import PakWheels from "./components/Blogs";
 import "./App.css";
 import Card from "./components/Card";
 import Blogs from "./components/Blogs";
 import { Route } from "react-router";
 import { BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
-import CreateBlog from './components/CreateBlog';
-import Header from './components/header';
-import ReadBlog from './components/blogRead';
-import RightContentArea from './components/RightContentArea';
-
+import CreateBlog from "./components/CreateBlog";
+import Header from "./components/header";
+import ReadBlog from "./components/blogRead";
+import RightContentArea from "./components/RightContentArea";
 
 function App(props) {
   return (
@@ -27,17 +26,22 @@ function App(props) {
         </Route>
         <Route path="/blogs">
           <div className="row">
-              <Blogs />
+            <Blogs />
           </div>
         </Route>
         <Route path="/blog">
-              <ReadBlog />
+          <ReadBlog />
         </Route>
         <Route path="/createblog">
           <CreateBlog />
         </Route>
+        <Route path="/editblog">
+          <CreateBlog />
+        </Route>
         <Route path="/myblogs">
-          <RightContentArea />
+          <div className="d-flex flex-row justify-content-center">
+            <RightContentArea />
+          </div>
         </Route>
       </Switch>
     </Router>
@@ -45,4 +49,3 @@ function App(props) {
 }
 
 export default App;
-
