@@ -18,7 +18,7 @@ function useQuery() {
   const { search } = useLocation();
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
-export default function createBlog() {
+export default function CreateBlog() {
   const [value_title, setTitle] = useState("");
   const [value_body, setBody] = useState("");
   const query = useQuery();

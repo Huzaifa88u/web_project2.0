@@ -1,52 +1,57 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+
 import AdCard from './AdCard';
 
-const adContent=[
-    {
-        title:"Honda Civic 2019 Oriel i-VTEC CVT for Sale",
-        location: "Islamabad",
-        info: "2019 | 40,000km | Petrol | 1800cc | automatic",
-        updatedTime: "updated 9 minutes ago",
-        price: "PKR 37.5 lacs"
-    },
-    {
-        title:"Honda Civic 2019 Oriel i-VTEC CVT for Sale",
-        location: "Islamabad",
-        info: "2019 | 40,000km | Petrol | 1800cc | automatic",
-        updatedTime: "updated 9 minutes ago",
-        price: "PKR 37.5 lacs"
-    },
-    {
-        title:"Honda Civic 2019 Oriel i-VTEC CVT for Sale",
-        location: "Islamabad",
-        info: "2019 | 40,000km | Petrol | 1800cc | automatic",
-        updatedTime: "updated 9 minutes ago",
-        price: "PKR 37.5 lacs"
-    },
-    {
-        title:"Honda Civic 2019 Oriel i-VTEC CVT for Sale",
-        location: "Islamabad",
-        info: "2019 | 40,000km | Petrol | 1800cc | automatic",
-        updatedTime: "updated 9 minutes ago",
-        price: "PKR 37.5 lacs"
-    },
 
-]
-
+function useQuery() {
+    const { search } = useLocation();
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+}
 const RightContentArea = () => {
-    return(
-        <div class="h-100 p-4 border border-black mt-5 d-inline-block col-sm-12 col-md-9 bg-light">
-                <br/>
-                {adContent.map((ac)=>(
-                    <AdCard 
-                        title={ac["title"]} 
-                        content={ac["content"].slice(0,30)} 
-                        time={ac["time"]}
-                    />
-                    )
-                )}
-                <hr/>
-            </div>
+    const [blogs, setBlogs] = useState([]);
+    const query = useQuery();
+    const getblog = async () => {
+        const token = await axios
+            .get("http://localhost:3000/auth/getblogs")
+            .catch((err) => {
+                console.log(err);
+            })
+            .then((res) => {
+                setBlogs(res.data);
+            });
+    }
+
+    const fetchMyBlogs = async () => {
+        const token = await axios
+            .get(`http://localhost:3000/auth/myblogs/${query.get("id")}`)
+            .catch((err) => {
+                console.log(err);
+            })
+            .then((res) => {
+                setBlogs(res.data);
+            });
+    }
+
+    useEffect(() => {
+        !query.get("user") ? getblog() : fetchMyBlogs();
+    });
+
+    return (
+        blogs ? <div class="h-100 p-4 border border-black mt-5 d-inline-block col-sm-12 col-md-9 bg-light">
+            <br />
+            {blogs.map((b) => (
+                <AdCard
+                    title={b["Title"]}
+                    content={b["content"].slice(0, 30)}
+                    time={b["time"]}
+                    id={b["_id"]}
+                />
+            )
+            )}
+            <hr />
+        </div> : <h2>Loading...</h2>
 
     )
 }

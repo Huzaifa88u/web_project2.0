@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Collapse,
   Navbar,
@@ -10,41 +10,48 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem } from 'reactstrap';
+  DropdownItem
+} from 'reactstrap';
 
-export default class Example extends React.Component {
-  constructor(props) {
-    super(props);
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory } from "react-router-dom";
 
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      isOpen: false
-    };
+function useQuery() {
+  const { search } = useLocation();
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
+export default function Header () {
+  const [isOpen, setIsOpen] = useState();
+  const toggle = () => {
+    setIsOpen(!isOpen);
   }
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
+  const history = useHistory();
+const query = useQuery();
+
+  const myBlogs = () =>{
+    history.push({
+      pathname:"/myblogs",
+      search: `?userid=${query.get("userid")}`
+    })
   }
-  render() {
     return (
       <div>
         <Navbar color="light" light expand="md">
           <NavbarBrand href="/">reactstrap</NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
+          <NavbarToggler onClick={toggle} />
+          <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="/components/">My Blogs</NavLink>
+                <NavLink onClick={myBlogs}>My Blogs</NavLink>
               </NavItem>
               <NavItem>
                 <NavLink href="https://github.com/reactstrap/reactstrap">Logout</NavLink>
               </NavItem>
-              
+
             </Nav>
           </Collapse>
         </Navbar>
       </div>
     );
-  }
-}
+    }

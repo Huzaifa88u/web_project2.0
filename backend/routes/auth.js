@@ -33,7 +33,33 @@ router.post("/createblog", (req, res) => {
 
 
 router.get("/getblogs", (req, res) => {
-  const x = User.find(
+  const x = blog.find(
+    (err, testData) => {
+      if (err) {
+        res.send(err);
+        console.log(err);
+      } else {
+        res.send(testData);
+      }
+    }
+  );
+});
+
+router.get("/myblogs/:id", (req, res) => {
+  const x = blog.find({ userId: req.params.id },
+    (err, testData) => {
+      if (err) {
+        res.send(err);
+        console.log(err);
+      } else {
+        res.send(testData);
+      }
+    }
+  );
+});
+
+router.get("/blog/:id", (req, res) => {
+  const x = blog.find({_id:req.params.id},
     (err, testData) => {
       if (err) {
         res.send(err);
