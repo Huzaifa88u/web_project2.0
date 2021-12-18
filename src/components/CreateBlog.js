@@ -1,16 +1,9 @@
 import axios from "axios";
-import Header from "./header";
-import Field from "./Field";
 import "./Blog.css";
 import React, { useEffect, useState } from "react";
 import { Form } from "reactstrap";
 import { Col, FormGroup, Label, Input, Button } from "reactstrap";
-import {
-  BrowserRouter as Router,
-  Link,
-  useLocation,
-  useHistory,
-} from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 
 function useQuery() {
   const { search } = useLocation();
@@ -22,10 +15,6 @@ export default function CreateBlog() {
   const query = useQuery();
   const history = useHistory();
 
-  useEffect(() => {
-    // console.log(query.get("userid"));
-  });
-
   const addBlog = async (e) => {
     e.preventDefault();
     console.log(e);
@@ -35,7 +24,7 @@ export default function CreateBlog() {
       content: value_body,
       time: Date.now(),
     };
-    const token = await axios
+    await axios
       .post("http://localhost:3000/blogs/createblog", blog)
       .catch((err) => {
         console.log(err);
@@ -52,13 +41,14 @@ export default function CreateBlog() {
   };
 
   const fetchBlog = async () => {
-    const token = axios
+    axios
       .get(`http://localhost:3000/blogs/blog/${query.get("blogid")}`)
       .catch((err) => {
         console.log(err);
       })
       .then((res) => {
         if (res.data) {
+          console.log(res.data[0]);
           setTitle(res.data[0].Title);
           setBody(res.data[0].content);
           console.log(value_body);
@@ -84,7 +74,7 @@ export default function CreateBlog() {
       content: value_body,
       time: Date.now(),
     };
-    const token = axios
+    axios
       .put(`http://localhost:3000/blogs/editblog/${query.get("blogid")}`, blog)
       .catch((err) => {
         console.log(err);
@@ -93,10 +83,7 @@ export default function CreateBlog() {
         console.log(res.data);
         if (res.data) {
           console.log("successful update");
-          history.push({
-            pathname: "/blogs ",
-            search: `?userid=${query.get("userid")}`,
-          });
+          history.push("/blogs");
         }
       });
   };
@@ -112,7 +99,7 @@ export default function CreateBlog() {
             onChange={(e) => setTitle(e.target.value)}
             type="text"
             name="title"
-            value={query.get("edit") ?? value_title}
+            value={value_title}
             id="title"
             placeholder="Blog''s Title"
             bsSize="lg"
@@ -127,7 +114,7 @@ export default function CreateBlog() {
             type="text"
             name="body"
             id="body"
-            value={query.get("edit") ?? value_body}
+            value={value_body}
             placeholder="Write here..."
             bsSize="lg"
           />

@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import "../App.css";
 import "./Card.css";
 import Field from "./Field";
+import ls from "localStorage";
 
 const Card = (props) => {
   const [name, setName] = useState("");
@@ -27,33 +28,33 @@ const Card = (props) => {
 
   const addUser = async (e) => {
     e.preventDefault();
-    const user = { email: username, password: password, name: name };
-    const token = await axios
-      .post("http://localhost:3000/auth/createuser", user)
-      .catch((err) => {
-        console.log(err);
-      })
-      .then(() => {});
+    if (password === confirmPassword) {
+      const user = { email: username, password: password, name: name };
+      await axios
+        .post("http://localhost:3000/auth/createuser", user)
+        .catch((err) => {
+          console.log(err);
+        })
+        .then(() => {});
+    } else {
+    }
   };
 
   const fetchUser = async (e) => {
     e.preventDefault();
-    const res = await axios
+    await axios
       .get(`http://localhost:3000/auth/${name}/${password}`)
       .catch((err) => {
         console.error(err);
       })
       .then((r) => {
-        console.log(r.data);
-        if(r.data) history.push({pathname:"/blogs",search:`?userid=${r.data._id}`});
-      
+        console.log(r);
+        ls.setItem("userid", r.data);
+        if (r.data) {
+          history.push("/blogs");
+        }
       });
   };
-
-  useEffect(() => {
-    console.log(name);
-    console.log(password);
-  });
 
   return (
     <div className="parent">

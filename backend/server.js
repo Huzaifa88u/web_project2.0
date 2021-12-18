@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const MongoClient = require("mongodb").MongoClient;
+// const MongoClient = require("mongodb").MongoClient;
 const bodyParser = require("body-parser");
 var auth = require("./routes/auth");
 var blogs = require("./routes/blog");

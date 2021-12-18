@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
-
+import ls from "local-storage";
 import AdCard from "./AdCard";
 
 function useQuery() {
@@ -14,7 +14,7 @@ const RightContentArea = () => {
   const [empty, setEmpty] = useState(false);
 
   const getblog = async () => {
-    const token = await axios
+    await axios
       .get("http://localhost:3000/blogs/getblogs")
       .catch((err) => {
         console.log(err);
@@ -25,33 +25,36 @@ const RightContentArea = () => {
   };
 
   const fetchMyBlogs = async () => {
-    console.log("entered");
-    const token = await axios
-      .get(`http://localhost:3000/blogs/myblogs/${query.get("userid")}`)
+    console.log({ message: ls.get("userid") });
+
+    await axios
+      .get(`http://localhost:3000/blogs/myblogs/${ls.get("userid")}`)
       .catch((err) => {
         console.log(err);
       })
       .then((res) => {
+        console.log(res);
         setEmpty(true);
         setBlogs(res?.data);
       });
   };
 
   useEffect(() => {
-    !query.get("userid") ? getblog() : fetchMyBlogs();
+    !query.get("myblogs") ? getblog() : fetchMyBlogs();
     console.log(empty);
   }, []);
 
   return blogs ? (
     <div class="h-100 p-4 border border-black mt-5 d-inline-block col-sm-12 col-md-9 bg-light">
       <br />
-      {blogs?.map((b) => (
+      {blogs?.map((b, i) => (
         <AdCard
           title={b["Title"]}
           content={b["content"].slice(0, 30)}
           time={b["time"]}
           id={b["_id"]}
           editable={query.get("myblogs") ? true : false}
+          key={i}
         />
       ))}
       <hr />

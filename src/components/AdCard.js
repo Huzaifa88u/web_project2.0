@@ -19,7 +19,7 @@ const AdCard = (props) => {
   const handleClick = () => {
     history.push({
       pathname: "/blog",
-      search: `?userid=${query.get("userid")}&blogid=${props.id}`,
+      search: `?blogid=${props.id}`,
     });
   };
 
@@ -38,7 +38,7 @@ const AdCard = (props) => {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    const token = axios
+    axios
       .delete(`http://localhost:3000/blogs/deleteblog/${props.id}`)
       .catch((err) => {
         console.log(err);
@@ -56,7 +56,7 @@ const AdCard = (props) => {
     <div class="shadow p-3 mb-5 bg-white rounded col-12 bg-light">
       <div className="d-flex flex-row">
         <div
-          class="d-flex flex-sm-column col-9 w-100 p-0 m-0 "
+          className="d-flex flex-sm-column col-9 w-100 p-0 m-0 "
           onClick={handleClick}
         >
           <h1 className="Title">{props.title}</h1>

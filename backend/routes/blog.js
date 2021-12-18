@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const MongoClient = require("mongodb").MongoClient;
 const blog = require("../models/Blog");
 const User = require("../models/User");
-
+const Cryptr = require("cryptr");
+const cryptr = new Cryptr("myTotalySecretKey");
 var router = express.Router();
 
 router.post("/createblog", (req, res) => {
@@ -31,11 +32,13 @@ router.get("/getblogs", (req, res) => {
 });
 
 router.get("/myblogs/:id", (req, res) => {
-  const x = blog.find({ userId: req.params.id }, (err, testData) => {
+  const decrypted = cryptr.decrypt(req.params.id);
+  const x = blog.find({ userId: decrypted }, (err, testData) => {
     if (err) {
       res.send(err);
       console.log(err);
     } else {
+      console.log(testData);
       res.send(testData);
     }
   });

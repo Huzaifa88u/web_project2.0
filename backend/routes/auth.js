@@ -1,8 +1,9 @@
 var express = require("express");
 const mongoose = require("mongoose");
-const MongoClient = require("mongodb").MongoClient;
-const blog = require("../models/Blog");
 const User = require("../models/User");
+const Cryptr = require("cryptr");
+const cryptr = new Cryptr("myTotalySecretKey");
+var ls = require("local-storage");
 
 var router = express.Router();
 
@@ -24,10 +25,12 @@ router.get("/:id/:pw", (req, res) => {
     { email: req.params.id, password: req.params.pw },
     (err, testData) => {
       if (err) {
-        res.send(err);
+        res.send(null);
         console.log(err);
       } else {
-        res.send(testData);
+        console.log(testData._id.toString());
+        const encrypted = cryptr.encrypt(testData._id.toString());
+        res.send(encrypted.toString());
       }
     }
   );

@@ -7,19 +7,9 @@ import {
   Nav,
   NavItem,
   NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
 } from "reactstrap";
 
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from "react-router-dom";
-
-function useQuery() {
-  const { search } = useLocation();
-  return React.useMemo(() => new URLSearchParams(search), [search]);
-}
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState();
@@ -27,39 +17,51 @@ export default function Header() {
     setIsOpen(!isOpen);
   };
   const history = useHistory();
-  const query = useQuery();
 
-  const myBlogs = () => {
+  const handleMyBlogs = () => {
     history.push({
       pathname: "/myblogs",
-      search: `?userid=${query.get("userid")}&myblogs=${true}`,
+      search: `?myblogs=${true}`,
     });
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("userid");
+    history.push("/login");
   };
 
   const handleCreateBlogs = () => {
     history.push({
       pathname: "/createblog",
-      search: `?userid=${query.get("userid")}`,
+      search: `?user=${localStorage.getItem("userid")}`,
     });
   };
 
   return (
     <div>
       <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">reactstrap</NavbarBrand>
+        <NavbarBrand
+          onClick={() =>
+            localStorage.getItem("userid")
+              ? history.push("/")
+              : history.push("/login")
+          }
+          style={{ cursor: "pointer" }}
+        >
+          Blog Center
+        </NavbarBrand>
         <NavbarToggler onClick={toggle} />
+
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem>
               <NavLink onClick={handleCreateBlogs}>Create Blogs</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink onClick={myBlogs}>My Blogs</NavLink>
+              <NavLink onClick={handleMyBlogs}>My Blogs</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="https://github.com/reactstrap/reactstrap">
-                Logout
-              </NavLink>
+              <NavLink onClick={handleLogout}>Logout</NavLink>
             </NavItem>
           </Nav>
         </Collapse>
