@@ -12,7 +12,7 @@ const Card = (props) => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const [error, setError] = useState("");
   const history = useHistory();
 
   const login_array = [
@@ -27,6 +27,8 @@ const Card = (props) => {
   ];
 
   const addUser = async (e) => {
+    setError("");
+
     e.preventDefault();
     if (password === confirmPassword) {
       const user = { email: username, password: password, name: name };
@@ -34,23 +36,28 @@ const Card = (props) => {
         .post("http://localhost:3000/auth/createuser", user)
         .catch((err) => {
           console.log(err);
+          setError("signup");
         })
         .then(() => {});
     } else {
+      setError("pws");
     }
   };
 
   const fetchUser = async (e) => {
+    setError("");
+
     e.preventDefault();
     await axios
       .get(`http://localhost:3000/auth/${name}/${password}`)
       .catch((err) => {
         console.error(err);
+        setError("login");
       })
       .then((r) => {
         console.log(r);
-        ls.setItem("userid", r.data);
-        if (r.data) {
+        if (r?.data) {
+          ls.setItem("userid", r.data);
           history.push("/blogs");
         }
       });
@@ -94,19 +101,46 @@ const Card = (props) => {
               className="btn mt-3"
               onClick={props.title === "login" ? fetchUser : addUser}
             >
-              {props.title === "signup" ? "Sign Up" : "Login"}
+              {props.title === "login" ? "Login" : "Sign Up"}
             </button>
           </Link>
         </form>
+        {error === "login" && (
+          <div class="alert alert-danger" role="alert">
+            Wrong email or password
+          </div>
+        )}
+        {error === "signup" && (
+          <div class="alert alert-danger" role="alert">
+            Email already exist
+          </div>
+        )}
+        {error === "pws" && (
+          <div class="alert alert-danger" role="alert">
+            Check your password fields again
+          </div>
+        )}
         <div className="text-center fs-6">
           <a>Forget password?</a> or{" "}
-          {props.title !== "signup" ? (
-            <Link to="/signup">
-              <a>Sign up</a>
+          {props.title !== "login" ? (
+            <Link to="/login">
+              <a
+                onClick={() => {
+                  setError("");
+                }}
+              >
+                Login
+              </a>
             </Link>
           ) : (
-            <Link to="/login">
-              <a>Login</a>
+            <Link to="/signup">
+              <a
+                onClick={() => {
+                  setError("");
+                }}
+              >
+                Sign Up
+              </a>
             </Link>
           )}
         </div>

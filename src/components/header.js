@@ -39,7 +39,7 @@ export default function Header() {
 
   return (
     <div>
-      <Navbar color="light" light expand="md">
+      <Navbar light expand="md">
         <NavbarBrand
           onClick={() =>
             localStorage.getItem("userid")
@@ -54,13 +54,13 @@ export default function Header() {
 
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
-            <NavItem>
+            <NavItem style={{ cursor: "pointer" }}>
               <NavLink onClick={handleCreateBlogs}>Create Blogs</NavLink>
             </NavItem>
-            <NavItem>
+            <NavItem style={{ cursor: "pointer" }}>
               <NavLink onClick={handleMyBlogs}>My Blogs</NavLink>
             </NavItem>
-            <NavItem>
+            <NavItem style={{ cursor: "pointer" }}>
               <NavLink onClick={handleLogout}>Logout</NavLink>
             </NavItem>
           </Nav>

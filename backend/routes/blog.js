@@ -20,7 +20,7 @@ router.post("/createblog", (req, res) => {
   });
 });
 
-router.get("/getblogs", (req, res) => {
+router.get("/getblogs/:page", (req, res, next) => {
   const x = blog.find((err, testData) => {
     if (err) {
       res.send(err);
