@@ -21,6 +21,8 @@ router.post("/createuser", (req, res) => {
 });
 
 router.get("/:id/:pw", (req, res) => {
+  console.log(req.params.id);
+  console.log(req.params.pw);
   const x = User.findOne(
     { email: req.params.id, password: req.params.pw },
     (err, testData) => {
@@ -28,8 +30,8 @@ router.get("/:id/:pw", (req, res) => {
         res.send(null);
         console.log(err);
       } else {
-        console.log(testData._id.toString());
-        const encrypted = cryptr.encrypt(testData._id.toString());
+        console.log(testData?._id.toString());
+        const encrypted = cryptr.encrypt(testData?._id.toString());
         res.send(encrypted.toString());
       }
     }

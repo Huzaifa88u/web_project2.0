@@ -19,7 +19,7 @@ export default function CreateBlog() {
     e.preventDefault();
     console.log(e);
     const blog = {
-      userId: query.get("userid"),
+      userId: localStorage.getItem("userid"),
       Title: value_title,
       content: value_body,
       time: Date.now(),
@@ -30,8 +30,8 @@ export default function CreateBlog() {
         console.log(err);
       })
       .then((res) => {
-        console.log(res.data);
-        if (res.data) {
+        console.log(res?.data);
+        if (res?.data) {
           history.push({
             pathname: "/blogs",
             search: `?userid=${query.get("userid")}`,

@@ -43,7 +43,7 @@ export default function Header() {
         <NavbarBrand
           onClick={() =>
             localStorage.getItem("userid")
-              ? history.push("/")
+              ? history.push("/blogs")
               : history.push("/login")
           }
           style={{ cursor: "pointer" }}

@@ -9,36 +9,40 @@ import ls from "localStorage";
 
 const Card = (props) => {
   const [name, setName] = useState("");
-  const [username, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
   const login_array = [
-    ["text", "username", "Username", setName],
+    ["email", "email", "Email", setEmail],
     ["password", "password", "Password", setPassword],
   ];
   const Signup_array = [
-    ["text", "name", "name", setName],
-    ["text", "username", "Username", setUserName],
+    ["email", "email", "Email", setEmail],
+    ["text", "name", "Name", setName],
     ["password", "password", "Password", setPassword],
-    ["password", "password", "Password", setConfirmPassword],
+    ["password", "password", "Confirm Password", setConfirmPassword],
   ];
 
   const addUser = async (e) => {
     setError("");
 
     e.preventDefault();
-    if (password === confirmPassword) {
-      const user = { email: username, password: password, name: name };
+    if (password === confirmPassword && email.includes("@")) {
+      setLoading(true);
+      const user = { email: email, password: password, name: name };
       await axios
         .post("http://localhost:3000/auth/createuser", user)
         .catch((err) => {
           console.log(err);
           setError("signup");
         })
-        .then(() => {});
+        .then(() => {
+          setLoading(false);
+        });
     } else {
       setError("pws");
     }
@@ -46,16 +50,17 @@ const Card = (props) => {
 
   const fetchUser = async (e) => {
     setError("");
-
+    setLoading(true);
     e.preventDefault();
     await axios
-      .get(`http://localhost:3000/auth/${name}/${password}`)
+      .get(`http://localhost:3000/auth/${email}/${password}`)
       .catch((err) => {
         console.error(err);
         setError("login");
       })
       .then((r) => {
         console.log(r);
+        setLoading(false);
         if (r?.data) {
           ls.setItem("userid", r.data);
           history.push("/blogs");
@@ -98,7 +103,7 @@ const Card = (props) => {
               ))}
           <Link to="/Post">
             <button
-              className="btn mt-3"
+              className={`btn mt-3 ${loading && "disabled"}`}
               onClick={props.title === "login" ? fetchUser : addUser}
             >
               {props.title === "login" ? "Login" : "Sign Up"}
@@ -117,7 +122,7 @@ const Card = (props) => {
         )}
         {error === "pws" && (
           <div class="alert alert-danger" role="alert">
-            Check your password fields again
+            Check your fields again
           </div>
         )}
         <div className="text-center fs-6">

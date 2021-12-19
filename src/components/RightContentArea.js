@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import ls from "local-storage";
 import AdCard from "./AdCard";
+import Pagination from "./Pagination";
 
 function useQuery() {
   const { search } = useLocation();
@@ -12,10 +13,11 @@ const RightContentArea = () => {
   const [blogs, setBlogs] = useState([]);
   const query = useQuery();
   const [empty, setEmpty] = useState(false);
-
+  const [page, setPage] = useState(1);
+  const [blogCount, setBlogCount] = useState(1);
   const getblog = async () => {
     await axios
-      .get("http://localhost:3000/blogs/getblogs")
+      .get(`http://localhost:3000/blogs/getblogs/${2}/${page}`)
       .catch((err) => {
         console.log(err);
       })
@@ -40,9 +42,17 @@ const RightContentArea = () => {
   };
 
   useEffect(() => {
+    axios
+      .get("http://localhost:3000/blogs/blogcount")
+      .catch((err) => {
+        console.log(err);
+      })
+      .then((res) => {
+        setBlogCount(res.data.count);
+      });
     !query.get("myblogs") ? getblog() : fetchMyBlogs();
-    console.log(empty);
-  }, []);
+    console.log(page);
+  }, [page]);
 
   return blogs ? (
     <div class="h-100 p-4 border border-black mt-5 d-inline-block col-sm-12 col-md-9 bg-light">
@@ -58,6 +68,7 @@ const RightContentArea = () => {
         />
       ))}
       <hr />
+      <Pagination blogCount={blogCount} page={page} setPage={setPage} />
     </div>
   ) : (
     <h2>{!empty ? "Loading..." : "There are no blogs yet..."}</h2>
