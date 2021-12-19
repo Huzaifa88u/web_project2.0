@@ -41,10 +41,15 @@ router.get("/getblogs/:limit/:page", (req, res) => {
   //     }
   //   }
   // );
+  const pageOptions = {
+    page: parseInt(req.params.page, 10) || 0,
+    limit: parseInt(req.params.limit, 10) || 10,
+  };
+
   var query = blog
     .find()
-    .skip(req.params.limit * req.params.page)
-    .limit(req.params.limit);
+    .skip(pageOptions.page * pageOptions.limit)
+    .limit(pageOptions.limit);
 
   query.exec(function (err, doc) {
     if (err) {

@@ -13,7 +13,7 @@ const RightContentArea = () => {
   const [blogs, setBlogs] = useState([]);
   const query = useQuery();
   const [empty, setEmpty] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [blogCount, setBlogCount] = useState(1);
   const getblog = async () => {
     await axios

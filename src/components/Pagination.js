@@ -19,7 +19,7 @@ const Pagination = (props) => {
             <li class="page-item">
               <a
                 class="page-link paginate-round"
-                onClick={() => props.setPage(i + 1)}
+                onClick={() => props.setPage(i)}
                 href="#"
               >
                 {i + 1}
