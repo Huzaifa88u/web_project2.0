@@ -15,7 +15,7 @@ const Pagination = (props) => {
           </a>
         </li>
         {size > 1 &&
-          Array.apply(null, Array(size / 2)).map((x, i) => (
+          Array.apply(null, Array(Math.round(size/2))).map((x, i) => (
             <li class="page-item">
               <a
                 class="page-link paginate-round"

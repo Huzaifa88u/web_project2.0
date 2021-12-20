@@ -10,6 +10,7 @@ import Header from "./components/header";
 import ReadBlog from "./components/blogRead";
 import RightContentArea from "./components/RightContentArea";
 import ls from "localStorage";
+import FriendRequests from "./components/FriendRequests";
 
 function App() {
   return (
@@ -49,6 +50,10 @@ function App() {
             <RightContentArea />
           </div>
         </Route>
+        <Route path="/friendrequests">
+        <FriendRequests />
+      </Route>
+    
       </Switch>
     </Router>
   );

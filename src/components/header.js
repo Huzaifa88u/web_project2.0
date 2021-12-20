@@ -6,10 +6,11 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
+  
   NavLink,
 } from "reactstrap";
 
-import { useHistory } from "react-router-dom";
+import { Link,useHistory } from "react-router-dom";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState();
@@ -54,6 +55,10 @@ export default function Header() {
 
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
+          <NavItem style={{ cursor: "pointer" }}>
+              <NavLink onClick={history.push("/friendrequests")}>Friend Requests</NavLink>
+            </NavItem>
+            
             <NavItem style={{ cursor: "pointer" }}>
               <NavLink onClick={handleCreateBlogs}>Create Blogs</NavLink>
             </NavItem>

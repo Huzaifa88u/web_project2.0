@@ -49,8 +49,8 @@ export default function CreateBlog() {
       .then((res) => {
         if (res.data) {
           console.log(res.data[0]);
-          setTitle(res.data[0].Title);
-          setBody(res.data[0].content);
+          setTitle(res.data[0]?.Title);
+          setBody(res.data[0]?.content);
           console.log(value_body);
         } else {
           alert("Error fetching blog");
