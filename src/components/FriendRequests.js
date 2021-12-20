@@ -26,10 +26,10 @@ class FriendsView extends React.Component {
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
           <ModalHeader toggle={this.toggle}>Friend Requests</ModalHeader>
           <ModalBody>
-            <Card style={{ width: '28rem' }}>
+            <Card style={{ width: '30rem' }}>
               <Card.Body>
                 <div className="row">
-                  <div className="col-4 mr-5">
+                  <div className="col-3 mr-5">
                   <Avatar 
                     alt="Remy Sharp"
                     src="/static/images/avatar/1.jpg"

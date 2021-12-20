@@ -11,6 +11,8 @@ import ReadBlog from "./components/blogRead";
 import RightContentArea from "./components/RightContentArea";
 import ls from "localStorage";
 import FriendRequests from "./components/FriendRequests";
+import FriendsView from "./components/FriendsView";
+import EditProfile from "./components/EditProfile";
 
 function App() {
   return (
@@ -52,6 +54,12 @@ function App() {
         </Route>
         <Route path="/friendrequests">
         <FriendRequests />
+      </Route>
+      <Route path="/editprofile">
+        <EditProfile />
+      </Route>
+      <Route path="friendsview">
+        <FriendsView />
       </Route>
     
       </Switch>

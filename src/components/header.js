@@ -56,7 +56,13 @@ export default function Header() {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
           <NavItem style={{ cursor: "pointer" }}>
-              <NavLink onClick={history.push("/friendrequests")}>Friend Requests</NavLink>
+              <NavLink ><Link to="/friendrequests">Friend Requests</Link></NavLink>
+            </NavItem>
+            <NavItem style={{ cursor: "pointer" }}>
+              <NavLink ><Link to="/editprofile">Edit Profile</Link></NavLink>
+            </NavItem>
+            <NavItem style={{ cursor: "pointer" }}>
+              <NavLink ><Link to="/friendsview">View Friends</Link></NavLink>
             </NavItem>
             
             <NavItem style={{ cursor: "pointer" }}>
