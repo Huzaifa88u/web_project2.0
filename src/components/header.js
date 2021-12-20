@@ -64,7 +64,7 @@ export default function Header() {
             <NavItem style={{ cursor: "pointer" }}>
               <NavLink ><Link to="/friendsview">View Friends</Link></NavLink>
             </NavItem>
-            
+           
             <NavItem style={{ cursor: "pointer" }}>
               <NavLink onClick={handleCreateBlogs}>Create Blogs</NavLink>
             </NavItem>

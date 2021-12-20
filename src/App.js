@@ -58,7 +58,7 @@ function App() {
       <Route path="/editprofile">
         <EditProfile />
       </Route>
-      <Route path="friendsview">
+      <Route path="/friendsview">
         <FriendsView />
       </Route>
     

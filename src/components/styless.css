@@ -1,0 +1,29 @@
+.pw-icon{
+    height:35%;
+    width:50%
+}
+.pw-icon1{
+    height:60%;
+    width:30%
+}
+.header{
+    margin-left:5;
+    padding-left: 5;
+}
+.nav_style{
+    margin-top: 0;
+    height: 25%;
+    width: 105%;
+}
+.head_right{
+    display: flex;
+    text-align:right ;
+}
+.img_style{
+    height: 65%;
+    width:140px
+}
+.img_style1{
+    height:85%;
+    width:150px
+}
