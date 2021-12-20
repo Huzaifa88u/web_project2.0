@@ -21,7 +21,7 @@ export default function EditProfile() {
         <div className="parent">
             <div className="wrapper ">
 
-                <div className="text-center mt-4 name "></div>
+                <div className="text-center mt-4"></div>
                 <form className="p-3 mt-3">
                     {editProfile.map((ep, i) => (
                         <Field
