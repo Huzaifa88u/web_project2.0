@@ -61,7 +61,7 @@ function App() {
       <Route path="/friendsview">
         <FriendsView />
       </Route>
-    
+      
       </Switch>
     </Router>
   );

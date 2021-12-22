@@ -19,7 +19,19 @@ router.post("/createuser", (req, res) => {
     }
   });
 });
+router.get("/getuser/:id",(req,res)=>{
+  const x=User.find({email:req.params.id},(err,testData)=>{
+    if (err){
+      res.send(err);
+      console.log(err);
 
+    }
+    else{
+       console.log("User",testData);
+       res.send(testData);
+    }
+  });
+});
 router.get("/:id/:pw", (req, res) => {
   console.log(req.params.id);
   console.log(req.params.pw);
