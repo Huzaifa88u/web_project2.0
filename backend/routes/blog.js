@@ -30,17 +30,6 @@ router.post("/createblog", (req, res) => {
 });
 
 router.get("/getblogs/:limit/:page", (req, res) => {
-  // const x = blog.find(
-  //   { skip: req.params.limit * req.params.page, limit: req.params.limit },
-  //   (err, testData) => {
-  //     if (err) {
-  //       res.send(err);
-  //       console.log(err);
-  //     } else {
-  //       res.send(testData);
-  //     }
-  //   }
-  // );
   const pageOptions = {
     page: parseInt(req.params.page, 10) || 0,
     limit: parseInt(req.params.limit, 10) || 10,

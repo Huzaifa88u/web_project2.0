@@ -13,6 +13,7 @@ import ls from "localStorage";
 import FriendRequests from "./components/FriendRequests";
 import FriendsView from "./components/FriendsView";
 import EditProfile from "./components/EditProfile";
+import UserProfile from "./components/UserProfile";
 
 function App() {
   return (
@@ -61,7 +62,9 @@ function App() {
       <Route path="/friendsview">
         <FriendsView />
       </Route>
-      
+      <Route path="/userprofile">
+        <UserProfile/>
+      </Route>
       </Switch>
     </Router>
   );
