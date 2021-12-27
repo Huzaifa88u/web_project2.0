@@ -34,7 +34,7 @@ router.put("/edituser/:id", (req, res) => {
         res.send(err);
         console.log(err);
       } else {
-        console.log(testData);
+        console.log("37:", testData);
         const token = signToken(testData);
         res.send({ token, testData });
       }
