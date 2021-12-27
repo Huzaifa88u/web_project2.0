@@ -2,12 +2,12 @@ import "./App.css";
 // import PakWheels from "./components/Blogs";
 import "./App.css";
 import Card from "./components/Card";
-import Blogs from "./components/Blogs";
+import Posts from "./components/Posts";
 import { Route } from "react-router";
 import { BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
-import CreateBlog from "./components/CreateBlog";
+import CreatePost from "./components/CreatePost";
 import Header from "./components/header";
-import ReadBlog from "./components/blogRead";
+import ReadPost from "./components/postRead";
 import RightContentArea from "./components/RightContentArea";
 import ls from "localStorage";
 import FriendRequests from "./components/FriendRequests";
@@ -23,7 +23,7 @@ function App() {
         <Route path="/" exact>
           {console.log("userid:", ls.getItem("userid"))}
           {ls.getItem("userid") ? (
-            <Redirect to="blogs" />
+            <Redirect to="posts" />
           ) : (
             <Card title="login" />
           )}
@@ -34,37 +34,37 @@ function App() {
         <Route path="/signup">
           <Card title="Signup" />
         </Route>
-        <Route path="/blogs">
+        <Route path="/posts">
           <div className="row">
-            <Blogs />
+            <Posts />
           </div>
         </Route>
-        <Route path="/blog">
-          <ReadBlog />
+        <Route path="/post">
+          <ReadPost />
         </Route>
-        <Route path="/createblog">
-          <CreateBlog />
+        <Route path="/createpost">
+          <CreatePost />
         </Route>
-        <Route path="/editblog">
-          <CreateBlog />
+        <Route path="/editpost">
+          <CreatePost />
         </Route>
-        <Route path="/myblogs">
+        <Route path="/myposts">
           <div className="d-flex flex-row justify-content-center">
             <RightContentArea />
           </div>
         </Route>
         <Route path="/friendrequests">
-        <FriendRequests />
-      </Route>
-      <Route path="/editprofile">
-        <EditProfile />
-      </Route>
-      <Route path="/friendsview">
-        <FriendsView />
-      </Route>
-      <Route path="/userprofile">
-        <UserProfile/>
-      </Route>
+          <FriendRequests />
+        </Route>
+        <Route path="/editprofile">
+          <EditProfile />
+        </Route>
+        <Route path="/friendsview">
+          <FriendsView />
+        </Route>
+        <Route path="/userprofile">
+          <UserProfile />
+        </Route>
       </Switch>
     </Router>
   );

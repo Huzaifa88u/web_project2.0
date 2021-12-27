@@ -6,6 +6,8 @@ import "../App.css";
 import "./Card.css";
 import Field from "./Field";
 import ls from "localStorage";
+import logo from "../assets/pc_logo.jpg";
+import TextField from "@mui/material/TextField";
 
 const Card = (props) => {
   const [name, setName] = useState("");
@@ -63,7 +65,7 @@ const Card = (props) => {
         setLoading(false);
         if (r?.data) {
           ls.setItem("userid", r.data);
-          history.push("/blogs");
+          history.push("/posts");
         }
       });
   };
@@ -73,31 +75,24 @@ const Card = (props) => {
       <div className="wrapper mt-5">
         <div className="logo">
           {" "}
-          <img
-            src="https://www.freepnglogos.com/uploads/twitter-logo-png/twitter-bird-symbols-png-logo-0.png"
-            alt=""
-          />{" "}
+          <img src={logo} alt="" />{" "}
         </div>
         <div className="text-center mt-4 name"></div>
         <form className="p-3 mt-3">
           {props.title === "login"
             ? login_array.map((login_arr, i) => (
                 <Field
-                  key={i}
                   type={login_arr[0]}
-                  name={login_arr[1]}
                   id={login_arr[1]}
-                  placeholder={login_arr[2]}
+                  label={login_arr[2]}
                   onChange={(event) => login_arr[3](event.target.value)}
                 />
               ))
             : Signup_array.map((Signup_arr, i) => (
                 <Field
-                  key={i}
                   type={Signup_arr[0]}
-                  name={Signup_arr[1]}
                   id={Signup_arr[1]}
-                  placeholder={Signup_arr[2]}
+                  label={Signup_arr[2]}
                   onChange={(event) => Signup_arr[3](event.target.value)}
                 />
               ))}

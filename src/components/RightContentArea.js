@@ -10,68 +10,71 @@ function useQuery() {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 const RightContentArea = () => {
-  const [blogs, setBlogs] = useState([]);
+  const [posts, setPosts] = useState([]);
   const query = useQuery();
   const [empty, setEmpty] = useState(false);
   const [page, setPage] = useState(0);
-  const [blogCount, setBlogCount] = useState(1);
-  const getblog = async () => {
+  const [postCount, setPostCount] = useState(1);
+  const getPost = async () => {
     await axios
-      .get(`http://localhost:3000/blogs/getblogs/${2}/${page}`)
-      .catch((err) => {
-        console.log(err);
-      })
-      .then((res) => {
-        setBlogs(res?.data);
-      });
-  };
-
-  const fetchMyBlogs = async () => {
-    console.log({ message: ls.get("userid") });
-
-    await axios
-      .get(`http://localhost:3000/blogs/myblogs/${ls.get("userid")}`)
+      .get(`http://localhost:3000/Posts/getPosts/${2}/${page}`)
       .catch((err) => {
         console.log(err);
       })
       .then((res) => {
         console.log(res);
         setEmpty(true);
-        setBlogs(res?.data);
+        setPosts(res?.data);
+      });
+  };
+
+  const fetchMyPosts = async () => {
+    console.log({ message: ls.get("userid") });
+
+    await axios
+      .get(`http://localhost:3000/posts/myposts/${ls.get("userid")}`)
+      .catch((err) => {
+        console.log(err);
+      })
+      .then((res) => {
+        console.log(res);
+        setEmpty(true);
+        setPosts(res?.data);
       });
   };
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/blogs/blogcount")
+      .get("http://localhost:3000/posts/postcount")
       .catch((err) => {
         console.log(err);
       })
       .then((res) => {
-        setBlogCount(res.data.count);
+        setPostCount(res?.data.count);
       });
-    !query.get("myblogs") ? getblog() : fetchMyBlogs();
+    console.log("getdata");
+    !query.get("myposts") ? getPost() : fetchMyPosts();
     console.log(page);
   }, [page]);
 
-  return blogs ? (
+  return posts ? (
     <div class="h-100 p-4 border border-black mt-5 d-inline-block col-sm-12 col-md-9 bg-light">
       <br />
-      {blogs?.map((b, i) => (
+      {posts?.map((b, i) => (
         <AdCard
           title={b["Title"]}
           content={b["content"].slice(0, 30)}
           time={b["time"]}
           id={b["_id"]}
-          editable={query.get("myblogs") ? true : false}
+          editable={query.get("myposts") ? true : false}
           key={i}
         />
       ))}
       <hr />
-      <Pagination blogCount={blogCount} page={page} setPage={setPage} />
+      <Pagination postCount={postCount} page={page} setPage={setPage} />
     </div>
   ) : (
-    <h2>{!empty ? "Loading..." : "There are no blogs yet..."}</h2>
+    <h2>{!empty ? "Loading..." : "There are no posts yet..."}</h2>
   );
 };
 

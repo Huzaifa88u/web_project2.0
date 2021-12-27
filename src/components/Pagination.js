@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const Pagination = (props) => {
-  var size = props.blogCount;
+  var size = props.postCount;
   useEffect(() => {
     console.log(size / 2);
   }, []);
@@ -15,7 +15,7 @@ const Pagination = (props) => {
           </a>
         </li>
         {size > 1 &&
-          Array.apply(null, Array(Math.round(size/2))).map((x, i) => (
+          Array.apply(null, Array(Math.round(size / 2))).map((x, i) => (
             <li class="page-item">
               <a
                 class="page-link paginate-round"
@@ -29,7 +29,7 @@ const Pagination = (props) => {
         <li class="page-item">
           <a
             class={`page-link paginate-round ${
-              props.page <= props.blogCount / 2 && "paginate-round"
+              props.page <= props.postCount / 2 && "paginate-round"
             }`}
             href="#"
             aria-label="Next"

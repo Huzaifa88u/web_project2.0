@@ -18,8 +18,8 @@ const AdCard = (props) => {
 
   const handleClick = () => {
     history.push({
-      pathname: "/blog",
-      search: `?blogid=${props.id}`,
+      pathname: "/post",
+      search: `?postid=${props.id}`,
     });
   };
 
@@ -27,11 +27,11 @@ const AdCard = (props) => {
     const queryParam = qs.parse(location.search);
     const newQueryParam = {
       ...queryParam,
-      blogid: props.id,
+      postid: props.id,
       edit: true,
     };
     history.push({
-      pathname: "/editblog",
+      pathname: "/editpost",
       search: qs.stringify(newQueryParam),
     });
   };
@@ -39,14 +39,14 @@ const AdCard = (props) => {
   const handleDelete = async (e) => {
     e.preventDefault();
     axios
-      .delete(`http://localhost:3000/blogs/deleteblog/${props.id}`)
+      .delete(`http://localhost:3000/posts/deletepost/${props.id}`)
       .catch((err) => {
         console.log(err);
       })
       .then((res) => {
         console.log(res);
         // history.push({
-        //   pathname: "/blogs ",
+        //   pathname: "/posts ",
         //   search: `?userid=${query.get("userid")}`,
         // });
       });

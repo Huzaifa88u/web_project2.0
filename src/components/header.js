@@ -7,13 +7,11 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-
   NavLink,
 } from "reactstrap";
 
 import { Link, useHistory, useLocation } from "react-router-dom";
 import SearchPage from "./SearchBar";
-
 
 function useQuery() {
   const { search } = useLocation();
@@ -34,44 +32,42 @@ export default function Header() {
     history.push("/login");
   };
 
-  
   return (
     <div className="justify-content-between">
-      <Navbar light expand="md">
+      <Navbar light expand="md" className="container m-0 col">
         <NavbarBrand
           onClick={() =>
             localStorage.getItem("userid")
-              ? history.push("/blogs")
+              ? history.push("/posts")
               : history.push("/login")
           }
+          className="col-1"
           style={{ cursor: "pointer" }}
         >
           Social Circle
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
-
-
-        <SearchPage/>
-
-
-        <Collapse isOpen={isOpen} navbar>
+        <div className="col-7">
+          <SearchPage />
+        </div>
+        <Collapse className="col-4" isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem style={{ cursor: "pointer" }}>
-              <NavLink ><Link to="/friendrequests">Friend Requests</Link></NavLink>
+              <NavLink>
+                <Link to="/friendrequests">Friend Requests</Link>
+              </NavLink>
             </NavItem>
             <NavItem style={{ cursor: "pointer" }}>
-              <NavLink ><Link to="/editprofile">Edit Profile</Link></NavLink>
+              <NavLink>
+                <Link to="/editprofile">Edit Profile</Link>
+              </NavLink>
             </NavItem>
             <NavItem style={{ cursor: "pointer" }}>
-              <NavLink ><Link to="/friendsview">View Friends</Link></NavLink>
+              <NavLink>
+                <Link to="/friendsview">View Friends</Link>
+              </NavLink>
             </NavItem>
 
-            {/* {/* <NavItem style={{ cursor: "pointer" }}>
-              <NavLink onClick={handleCreateBlogs}>Create Blogs</NavLink>
-            </NavItem>
-            <NavItem style={{ cursor: "pointer" }}>
-              <NavLink onClick={handleMyBlogs}>My Blogs</NavLink>
-            </NavItem> */}
             <NavItem style={{ cursor: "pointer" }}>
               <NavLink onClick={handleLogout}>Logout</NavLink>
             </NavItem>
