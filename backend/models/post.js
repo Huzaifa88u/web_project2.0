@@ -5,11 +5,20 @@ const post = mongoose.model("posts", {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  username: {
+    type: String,
+  },
   content: {
     type: String,
   },
   time: {
     type: Date,
+  },
+  likes: {
+    type: Number,
+  },
+  imageId: {
+    type: String,
   },
 });
 

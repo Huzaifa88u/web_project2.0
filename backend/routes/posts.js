@@ -5,16 +5,17 @@ const cryptr = new Cryptr("myTotalySecretKey");
 var router = express.Router();
 
 router.post("/createpost", (req, res) => {
-  console.log("decrypted", req.body.userId);
+  console.log("req.body.userId", req.body.userId);
 
-  const decrypted = cryptr.decrypt(req.body.userId);
   const b = new post({
-    userId: decrypted,
+    userId: req.body.userId,
     Title: req.body.Title,
     content: req.body.content,
     time: req.body.time,
+    username: req.body.username,
+    likes: req.body.likes,
   });
-  console.log("decrypted", decrypted);
+  console.log("req.body.userId", req.body.userId);
   b.save((err) => {
     if (err) {
       console.log({ message: err });
@@ -26,7 +27,7 @@ router.post("/createpost", (req, res) => {
   });
 });
 
-router.get("/getposta/:limit/:page", (req, res) => {
+router.get("/getposts/:limit/:page", (req, res) => {
   const pageOptions = {
     page: parseInt(req.params.page, 10) || 0,
     limit: parseInt(req.params.limit, 10) || 10,
@@ -65,8 +66,7 @@ router.get("/getposts", (req, res) => {
 });
 
 router.get("/myposts/:id", (req, res) => {
-  const decrypted = cryptr.decrypt(req.params.id);
-  const x = post.find({ userId: decrypted }, (err, testData) => {
+  const x = post.find({ userId: req.body.userId }, (err, testData) => {
     if (err) {
       res.send(err);
       console.log(err);
@@ -95,6 +95,22 @@ router.put("/editPost/:id", (req, res) => {
     (err, testData) => {
       if (err) {
         res.send(err);
+        console.log(err);
+      } else {
+        res.send(testData);
+      }
+    }
+  );
+});
+
+router.put("/likes/:id", (req, res) => {
+  console.log(req.params.id);
+  const x = post.findOneAndUpdate(
+    { _id: req.params.id },
+    req.body,
+    (err, testData) => {
+      if (err) {
+        res.status(401).send(err);
         console.log(err);
       } else {
         res.send(testData);
