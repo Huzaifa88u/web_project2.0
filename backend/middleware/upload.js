@@ -6,14 +6,14 @@ const storage = new GridFsStorage({
   options: { useNewUrlParser: true, useUnifiedTopology: true },
   file: (req, file) => {
     const match = ["image/png", "image/jpeg"];
-    // console.log("In File:");
+    console.log("In File:");
 
     if (match.indexOf(file.mimetype) === -1) {
       const filename = `${Date.now()}-any-name-${file.originalname}`;
-      // console.log("In 1st if");
+      console.log("In 1st if");
       return filename;
     }
-    // console.log("past if:");
+    console.log("past if:");
     return {
       bucketName: "photos",
       filename: `${Date.now()}-any-name-${file.originalname}`,

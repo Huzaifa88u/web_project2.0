@@ -4,6 +4,7 @@ import Field from "./Field";
 import axios from "axios";
 import ProfilePicture from "./ProfilePicture";
 import jwtDecode from "jwt-decode";
+
 export default function EditProfile() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -38,7 +39,7 @@ export default function EditProfile() {
       })
       .then((r) => {
         setLoading(false);
-        console.log(r.data.token);
+        // console.log(r.data.token);
         setName(r.data.testData.name);
         setEmail(r.data.testData.email);
         setPassword(r.data.testData.password);
@@ -48,8 +49,49 @@ export default function EditProfile() {
       });
   };
 
+  const uploadFile = async (event) => {
+    event.preventDefault();
+    var userData = {};
+    let data = new FormData();
+    data.append("file", event.target.files[0]);
+    // console.log(event.target.files[0]);
+    axios
+      .post("http://localhost:3000/file/upload", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .then(async (res) => {
+        // console.log("response: ", res?.data);
+        userData = {
+          ...jwtDecode(localStorage.getItem("userid")),
+          profilePicId: res?.data,
+        };
+        console.log("userData:", userData?.profilePicId);
+        await axios
+          .put(
+            `http://localhost:3000/auth/edituser/${localStorage.getItem(
+              "userid"
+            )}`,
+            userData
+          )
+          .catch((err) => {
+            console.error(err);
+          })
+          .then((r) => {
+            // console.log(r.data.token);
+            localStorage.setItem("userid", r.data.token);
+            getProfileImage(res?.data);
+          });
+      });
+  };
+
   const getUser = async () => {
     const data = await jwtDecode(localStorage.getItem("userid"));
+    console.log(data);
     setName(data?.name);
     setEmail(data?.email);
     setPassword(data?.password);
@@ -58,30 +100,35 @@ export default function EditProfile() {
     return data?.profilePicId;
   };
 
-  useEffect(() => {
-    getUser().then(async (res) => {
-      await axios
-        .get(`http://localhost:3000/file/${res}`)
-        .catch((err) => {
-          console.log(res);
-          console.log(err);
-        })
-        .then((file) => {
-          if (!file) {
-            console.log("No Files");
-          } else {
-            console.log(file.data);
-            setPicture(file.data);
-          }
-        });
-    });
-  }, []);
+  const getProfileImage = async (res) => {
+    console.log("res:", res);
+    await axios
+      .get(`http://localhost:3000/file/${res}`)
+      .catch((err) => {
+        // console.log(res);
+        console.log(err);
+      })
+      .then((file) => {
+        if (!file) {
+          console.log("No Files");
+        } else {
+          // console.log(file.data.imgurl);
+          setPicture(file.data.imgurl);
+        }
+      });
+  };
 
-  return picture ? (
+  useEffect(() => {
+    console.log("In useEffect");
+    getUser().then((res) => getProfileImage(res));
+  }, [localStorage.getItem("userid")]);
+
+  return email ? (
     <form type="submit" onSubmit={updateUser} className="p-3 mt-3">
       <center className="pb-3">
         <ProfilePicture
           image={picture ? picture : "https://picsum.photos/200"}
+          uploadFile={uploadFile}
         />
       </center>
       {editProfile.map((ep, i) => (

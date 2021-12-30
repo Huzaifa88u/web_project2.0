@@ -15,16 +15,16 @@ conn.once("open", function () {
   gfs.collection("photos");
 });
 
-router.post("/upload", async (req, res) => {
+router.post("/upload", upload.single("file"), async (req, res) => {
   if (req.file === undefined) return console.log("you must select a file.");
   console.log("file is not undefined");
   console.log(req.file.toString("base64"));
   // // const imgUrl = `http://localhost:8080/file/${req.file.filename}`;
-  // return res.send(req.file.filename);
+  return res.send(req.file.filename);
 });
 
 router.get("/:filename", async (req, res) => {
-  console.log("26, entered:", req.params.filename);
+  console.log("27, entered:", req.params.filename);
   const imageChunks = conn.collection("photos.chunks");
   const imageFiles = conn.collection("photos.files");
   var id = "";

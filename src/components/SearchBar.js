@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Field from "./Field";
 
 const SearchPage = () => {
   const [username, setUsername] = useState();
@@ -19,23 +20,32 @@ const SearchPage = () => {
           console.log(err);
         })
         .then((res) => {
-          console.log(res.data[0]?.email);
-          setUseremail(res.data[0]?.email);
-          setUsername(res.data[0]?.name);
+          console.log(res?.data[0]?.email);
+          setUseremail(res?.data[0]?.email);
+          setUsername(res?.data[0]?.name);
         });
     } else {
     }
   };
   return (
     <div class="input-group d-flex flex-row justify-content-center">
-      <div class="form-outline pl-5 w-100">
+      {/* <div class="form-outline pl-5 w-100">
         <input
           type="search"
           id="form1"
           class="form-control"
           onChange={handleUserSearch}
         />
+
         <label class="form-label" placeholder="Search" for="form1"></label>
+      </div> */}
+      <div className="w-100">
+        <Field
+          onChange={handleUserSearch}
+          type="text"
+          id="search"
+          label="Search"
+        />
       </div>
       <br />
       <div className="justify-content-between " onClick={handleuserProfile}>

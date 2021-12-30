@@ -1,43 +1,62 @@
-import axios from "axios";
+import "./Field.css";
 import "./post.css";
 import React, { useEffect, useState } from "react";
-import { Form } from "reactstrap";
-import { Col, FormGroup, Label, Input, Button } from "reactstrap";
-import { useLocation, useHistory } from "react-router-dom";
+import { Col, Form } from "reactstrap";
+import { Row, Button } from "reactstrap";
+import { useHistory, useLocation } from "react-router-dom";
+import jwtDecode from "jwt-decode";
+import { Avatar } from "@mui/material";
+import axios from "axios";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
 function useQuery() {
   const { search } = useLocation();
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 export default function CreatePost() {
-  const [value_title, setTitle] = useState("");
   const [value_body, setBody] = useState("");
+  const [img, setImg] = useState(null);
+  const [temp, setTemp] = useState(null);
   const query = useQuery();
   const history = useHistory();
 
+  const uploadFile = async () => {
+    let data = new FormData();
+    let res;
+
+    data.append("file", img);
+    console.log(img);
+    try {
+      res = await axios.post("http://localhost:3000/file/upload", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return res?.data;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const addPost = async (e) => {
     e.preventDefault();
-    console.log(e);
+    // console.log(e);
+    const data = await jwtDecode(localStorage.getItem("userid"));
+    const imageId = await uploadFile();
     const post = {
-      userId: localStorage.getItem("userid"),
-      Title: value_title,
+      userId: data._id,
       content: value_body,
       time: Date.now(),
+      likes: 0,
+      imageId: imageId,
+      username: data.name,
     };
-    await axios
-      .post("http://localhost:3000/posts/createpost", post)
-      .catch((err) => {
-        console.log(err);
-      })
-      .then((res) => {
-        console.log(res?.data);
-        if (res?.data) {
-          history.push({
-            pathname: "/posts",
-            search: `?userid=${query.get("userid")}`,
-          });
-        }
-      });
+    console.log("Post:", post);
+    try {
+      await axios.post("http://localhost:3000/posts/createpost", post);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fetchPost = async () => {
@@ -48,8 +67,6 @@ export default function CreatePost() {
       })
       .then((res) => {
         if (res.data) {
-          console.log(res.data[0]);
-          setTitle(res.data[0]?.Title);
           setBody(res.data[0]?.content);
           console.log(value_body);
         } else {
@@ -59,10 +76,10 @@ export default function CreatePost() {
   };
 
   useEffect(() => {
-    console.log(query.get("edit"));
     if (query.get("edit")) {
       fetchPost();
     }
+    console.log(temp);
   }, []);
 
   const editPost = async (e) => {
@@ -70,7 +87,6 @@ export default function CreatePost() {
     console.log("edit");
     const post = {
       userId: query.get("userid"),
-      Title: value_title,
       content: value_body,
       time: Date.now(),
     };
@@ -90,37 +106,44 @@ export default function CreatePost() {
 
   return (
     <Form onSubmit={!query.get("edit") ? addPost : editPost}>
-      <FormGroup col>
-        <Label for="title" sm={2} size="lg">
-          Title
-        </Label>
-        <Col sm={10}>
-          <Input
-            onChange={(e) => setTitle(e.target.value)}
-            type="text"
-            name="title"
-            value={value_title}
-            id="title"
-            placeholder="post's Title"
-            bsSize="lg"
-          />
-        </Col>
-        <Label for="body" sm={2} size="lg">
-          Content
-        </Label>
-        <Col sm={10}>
-          <Input
+      <Row>
+        <Col xs={2}></Col>
+        <Col xs={6}>
+          <input
             onChange={(e) => setBody(e.target.value)}
             type="text"
             name="body"
             id="body"
             value={value_body}
             placeholder="Write here..."
-            bsSize="lg"
+            className="createpost"
+            bsSize="md"
           />
+          {temp ? <strong> {temp.name} </strong> : ""}
         </Col>
-        <Button type="submit">Submit</Button>
-      </FormGroup>
+        <Col>
+          <Button type="submit" color="dark" className="mr-2">
+            Post
+          </Button>
+          <input
+            accept="image/*"
+            style={{ display: "none" }}
+            id="add-profile-picture"
+            type="file"
+            onChange={(e) => {
+              e.preventDefault();
+              setImg(e.target.files[0]);
+              setTemp(e.target.files[0]);
+              console.log(e.target.files[0]);
+            }}
+          />
+          <label htmlFor="add-profile-picture">
+            <div className="btn btn-danger">
+              <AddPhotoAlternateIcon />
+            </div>
+          </label>
+        </Col>
+      </Row>
     </Form>
   );
 }

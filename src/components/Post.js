@@ -27,9 +27,6 @@ const Post = (props) => {
             title="Like"
             color="gray"
           />
-          <InputOptions Icon={ChatOutlinedIcon} title="Comment" color="gray" />
-          <InputOptions Icon={ShareOutlinedIcon} title="Share" color="gray" />
-          <InputOptions Icon={SendOutlinedIcon} title="Send" color="gray" />
         </div>
       </div>
     </div>

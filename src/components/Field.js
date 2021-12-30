@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 
 const CssTextField = styled(TextField)({
   "& label.MuiInputLabel-root ": {
-    color: "#E35F10",
+    color: "black",
   },
   "& label.Mui-focused": {
     color: "#E35F21",

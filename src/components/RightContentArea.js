@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import ls from "local-storage";
 import AdCard from "./AdCard";
 import Pagination from "./Pagination";
+import CreatePost from "./CreatePost";
 
 function useQuery() {
   const { search } = useLocation();
@@ -17,7 +18,7 @@ const RightContentArea = () => {
   const [postCount, setPostCount] = useState(1);
   const getPost = async () => {
     await axios
-      .get(`http://localhost:3000/Posts/getPosts/${2}/${page}`)
+      .get(`http://localhost:3000/posts/getPosts/${2}/${page}`)
       .catch((err) => {
         console.log(err);
       })
@@ -59,13 +60,11 @@ const RightContentArea = () => {
 
   return posts ? (
     <div class="h-100 p-4 border border-black mt-5 d-inline-block col-sm-12 col-md-9 bg-light">
+      <CreatePost />
       <br />
       {posts?.map((b, i) => (
         <AdCard
-          title={b["Title"]}
-          content={b["content"].slice(0, 30)}
-          time={b["time"]}
-          id={b["_id"]}
+          data={b}
           editable={query.get("myposts") ? true : false}
           key={i}
         />

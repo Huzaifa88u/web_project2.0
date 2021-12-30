@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { Avatar } from "@mui/material";
+
 import {
   Collapse,
   Navbar,
@@ -9,9 +10,11 @@ import {
   NavItem,
   NavLink,
 } from "reactstrap";
+import logo from "../assets/pc_logo.jpg";
 
 import { Link, useHistory, useLocation } from "react-router-dom";
 import SearchPage from "./SearchBar";
+import FriendsView from "./FriendRequests";
 
 function useQuery() {
   const { search } = useLocation();
@@ -20,6 +23,7 @@ function useQuery() {
 
 export default function Header() {
   const query = useQuery();
+  const [modal, setModal] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const toggle = () => {
     setIsOpen(!isOpen);
@@ -44,7 +48,7 @@ export default function Header() {
           className="col-1"
           style={{ cursor: "pointer" }}
         >
-          Social Circle
+          <Avatar src={logo} sx={{ width: 50, height: 50 }} />
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <div className="col-7">
@@ -54,7 +58,7 @@ export default function Header() {
           <Nav className="ml-auto" navbar>
             <NavItem style={{ cursor: "pointer" }}>
               <NavLink>
-                <Link to="/friendrequests">Friend Requests</Link>
+                <Link onClick={() => setModal(!modal)}>Friend Requests</Link>
               </NavLink>
             </NavItem>
             <NavItem style={{ cursor: "pointer" }}>
@@ -74,6 +78,7 @@ export default function Header() {
           </Nav>
         </Collapse>
       </Navbar>
+      <FriendsView setModal={setModal} modal={modal} />
     </div>
   );
 }

@@ -9,13 +9,13 @@ router.post("/createpost", (req, res) => {
 
   const b = new post({
     userId: req.body.userId,
-    Title: req.body.Title,
     content: req.body.content,
     time: req.body.time,
     username: req.body.username,
     likes: req.body.likes,
+    imageId: req.body.imageId,
   });
-  console.log("req.body.userId", req.body.userId);
+  console.log("req.body.imageId", req.body.imageId);
   b.save((err) => {
     if (err) {
       console.log({ message: err });

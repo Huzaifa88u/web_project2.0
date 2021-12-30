@@ -1,0 +1,13 @@
+.createpost {
+  width: 100%;
+  height: auto;
+  border: 1px solid;
+  border-radius: 10px;
+  font-size: 13px;
+  padding: 9px;
+  overflow-wrap: break-word;
+}
+
+.createpost:focus {
+  border-color: white;
+}

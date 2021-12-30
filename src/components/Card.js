@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import "../App.css";
@@ -7,7 +7,6 @@ import "./Card.css";
 import Field from "./Field";
 import ls from "localStorage";
 import logo from "../assets/pc_logo.jpg";
-import TextField from "@mui/material/TextField";
 
 const Card = (props) => {
   const [name, setName] = useState("");
@@ -61,7 +60,7 @@ const Card = (props) => {
         setError("login");
       })
       .then((r) => {
-        console.log(r);
+        // console.log(r);
         setLoading(false);
         if (r?.data) {
           ls.setItem("userid", r.data);
@@ -121,7 +120,10 @@ const Card = (props) => {
           </div>
         )}
         <div className="text-center fs-6">
-          <a>Forget password?</a> or{" "}
+          <Link to="/forgetpassword">
+            <a>Forget password?</a>
+          </Link>{" "}
+          or{" "}
           {props.title !== "login" ? (
             <Link to="/login">
               <a
