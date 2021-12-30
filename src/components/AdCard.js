@@ -16,14 +16,15 @@ const AdCard = (props) => {
   const history = useHistory();
   const location = useLocation();
 
-  const [contentEdit, setContentEdit] = useState(null);
+  const [contentEdit, setContentEdit] = useState(false);
   const [picture, setPicture] = useState(null);
+  const [content, setContent] = useState(props.data.content);
   const date = new Date(props.data.time);
   const [likes, setLikes] = useState(
     parseInt(props.data.likes ? props.data.likes : 0)
   );
   useEffect(async () => {
-    console.log(props.editable);
+    console.log(content);
     await getImage();
   });
 
@@ -40,13 +41,6 @@ const AdCard = (props) => {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleClick = () => {
-    history.push({
-      pathname: "/post",
-      search: `?postid=${props.data._id}`,
-    });
   };
 
   const handleDelete = async (e) => {
@@ -88,17 +82,37 @@ const AdCard = (props) => {
       });
   };
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    let dataa = { ...props.data, content: content };
+    try {
+      console.log("handleUpdate");
+      await axios.put(
+        `http://localhost:3000/posts/editPost/${props.data._id}`,
+        dataa
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       class="shadow p-3 m-3 mb-5 bg-white rounded bg-light"
       style={{ width: "fit-content" }}
     >
       <div className="d-flex flex-column">
-        <div className="d-flex flex-column p-0 m-0" onClick={handleClick}>
+        <div className="d-flex flex-column p-0 m-0">
           <strong>{props.data.username}</strong>
-          <p className="Content" contentEditable={contentEdit}>
-            {props.data.content}
-          </p>
+          {!contentEdit ? (
+            <p className="Content">{content}</p>
+          ) : (
+            <input
+              type="text"
+              defaultValue={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+          )}
           <h6 className="Time">{moment(date.toString()).fromNow()}</h6>
           {picture && (
             <img
@@ -115,9 +129,16 @@ const AdCard = (props) => {
             <Button
               color="warning"
               className="m-1"
-              onClick={() => setContentEdit(true)}
+              onClick={(e) => {
+                e.preventDefault();
+                console.log(contentEdit);
+                if (contentEdit) {
+                  handleUpdate(e);
+                }
+                setContentEdit(!contentEdit);
+              }}
             >
-              Edit
+              {contentEdit ? "Update post" : "Edit"}
             </Button>
             <Button color="danger" className="m-1" onClick={handleDelete}>
               Delete

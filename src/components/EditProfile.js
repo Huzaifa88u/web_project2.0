@@ -71,7 +71,7 @@ export default function EditProfile() {
           ...jwtDecode(localStorage.getItem("userid")),
           profilePicId: res?.data,
         };
-        console.log("userData:", userData?.profilePicId);
+        // console.log("userData:", userData?.profilePicId);
         await axios
           .put(
             `http://localhost:3000/auth/edituser/${localStorage.getItem(
@@ -92,7 +92,7 @@ export default function EditProfile() {
 
   const getUser = async () => {
     const data = await jwtDecode(localStorage.getItem("userid"));
-    console.log(data);
+    // console.log(data);
     setName(data?.name);
     setEmail(data?.email);
     setPassword(data?.password);
@@ -102,7 +102,7 @@ export default function EditProfile() {
   };
 
   const getProfileImage = async (res) => {
-    console.log("res:", res);
+    // console.log("res:", res);
     await axios
       .get(`http://localhost:3000/file/${res}`)
       .catch((err) => {
@@ -120,7 +120,7 @@ export default function EditProfile() {
   };
 
   useEffect(() => {
-    console.log("In useEffect");
+    // console.log("In useEffect");
     getUser().then((res) => getProfileImage(res));
   }, [localStorage.getItem("userid")]);
 

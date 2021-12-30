@@ -5,7 +5,7 @@ const cryptr = new Cryptr("myTotalySecretKey");
 var router = express.Router();
 
 router.post("/createpost", (req, res) => {
-  console.log("req.body.userId", req.body.userId);
+  // console.log("req.body.userId", req.body.userId);
 
   const b = new post({
     userId: req.body.userId,
@@ -15,7 +15,7 @@ router.post("/createpost", (req, res) => {
     likes: req.body.likes,
     imageId: req.body.imageId,
   });
-  console.log("req.body.imageId", req.body.imageId);
+  // console.log("req.body.imageId", req.body.imageId);
   b.save((err) => {
     if (err) {
       console.log({ message: err });
@@ -78,7 +78,7 @@ router.get("/postcount/:id", (req, res) => {
   console.log("filered count");
   post.count({ userId: req.params.id }, function (err, count) {
     res.json({ count: count });
-    console.log("Number of posts:", count);
+    // console.log("Number of posts:", count);
   });
 });
 
@@ -99,6 +99,8 @@ router.put("/editPost/:id", (req, res) => {
     req.body,
     (err, testData) => {
       if (err) {
+        console.log("editpost");
+
         res.send(err);
         console.log(err);
       } else {
@@ -109,7 +111,7 @@ router.put("/editPost/:id", (req, res) => {
 });
 
 router.put("/likes/:id", (req, res) => {
-  console.log(req.params.id);
+  // console.log(req.params.id);
   const x = post.findOneAndUpdate(
     { _id: req.params.id },
     req.body,

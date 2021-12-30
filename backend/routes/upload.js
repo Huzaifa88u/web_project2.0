@@ -24,19 +24,19 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 });
 
 router.get("/:filename", async (req, res) => {
-  console.log("27, entered:", req.params.filename);
+  // console.log("27, entered:", req.params.filename);
   const imageChunks = conn.collection("photos.chunks");
   const imageFiles = conn.collection("photos.files");
   var id = "";
   await imageFiles.findOne(
     { filename: req.params.filename },
     async (err, file) => {
-      console.log(file);
+      // console.log(file);
       if (file) {
         res.contentType(file.contentType);
         id = file._id;
 
-        console.log("42, id:", file._id);
+        // console.log("42, id:", file._id);
         //making nested api calls on different collections
         await imageChunks
           .find({ files_id: file._id })
@@ -49,7 +49,7 @@ router.get("/:filename", async (req, res) => {
                 error: err.errmsg,
               });
             }
-            console.log("getting chunks");
+            // console.log("getting chunks");
             if (!chunks || chunks.length === 0) {
               //No data found
               console.log("chucks:", chunks);
@@ -58,7 +58,7 @@ router.get("/:filename", async (req, res) => {
                 message: "No data found",
               });
             }
-            console.log("merging chuncks");
+            // console.log("merging chuncks");
             let fileData = [];
             for (let i = 0; i < chunks.length; i++) {
               //This is in Binary JSON or BSON format, which is stored
@@ -66,7 +66,7 @@ router.get("/:filename", async (req, res) => {
 
               fileData.push(chunks[i].data.toString("base64"));
             }
-            console.log("creating url");
+            // console.log("creating url");
             //Display the chunks using the data URI format
             let finalFile =
               "data:" + file.contentType + ";base64," + fileData.join("");
@@ -77,9 +77,9 @@ router.get("/:filename", async (req, res) => {
               imgurl: finalFile,
             });
           });
-        console.log("36, found");
+        // console.log("36, found");
       } else {
-        console.log("404 not found");
+        // console.log("404 not found");
         res.send("404 not found");
       }
     }
