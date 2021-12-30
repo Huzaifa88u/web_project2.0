@@ -6,7 +6,6 @@ const verifyToken = require("../serverAuth.js").verifyToken;
 const signToken = require("../serverAuth.js").signToken;
 const Cryptr = require("cryptr");
 const cryptr = new Cryptr("myTotalySecretKey");
-
 const mailjet = require("node-mailjet").connect(
   "807749bbbe142782f3450e574778d325",
   "f9001c4a61ed394892e767133474781e"

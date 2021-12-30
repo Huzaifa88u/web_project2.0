@@ -4,6 +4,7 @@ import Field from "./Field";
 import axios from "axios";
 import ProfilePicture from "./ProfilePicture";
 import jwtDecode from "jwt-decode";
+import RightContentArea from "./RightContentArea";
 
 export default function EditProfile() {
   const [name, setName] = useState("");
@@ -124,37 +125,42 @@ export default function EditProfile() {
   }, [localStorage.getItem("userid")]);
 
   return email ? (
-    <form type="submit" onSubmit={updateUser} className="p-3 mt-3">
-      <center className="pb-3">
-        <ProfilePicture
-          image={picture ? picture : "https://picsum.photos/200"}
-          uploadFile={uploadFile}
-        />
-      </center>
-      {editProfile.map((ep, i) => (
-        <div className="container col-md-5 col-sm-10">
-          <Field
-            disabled={ep[4]}
-            type={ep[0]}
-            id={ep[1]}
-            label={ep[2]}
-            onChange={(event) => ep[3](event.target.value)}
-            value={ep[5]}
+    <div className="d-flex flex-column">
+      <form type="submit" onSubmit={updateUser} className="p-3 mt-3">
+        <center className="pb-3">
+          <ProfilePicture
+            image={picture ? picture : "https://picsum.photos/200"}
+            uploadFile={uploadFile}
           />
-        </div>
-      ))}
-      <center className="container col-md-5 col-sm-10">
-        <Button
-          onClick={updateUser}
-          className="mt-4 p-3"
-          color="primary"
-          type="submit"
-          disabled={loading && true}
-        >
-          Update Profile
-        </Button>
-      </center>
-    </form>
+        </center>
+        {editProfile.map((ep, i) => (
+          <div className="container col-md-5 col-sm-10">
+            <Field
+              disabled={ep[4]}
+              type={ep[0]}
+              id={ep[1]}
+              label={ep[2]}
+              onChange={(event) => ep[3](event.target.value)}
+              value={ep[5]}
+            />
+          </div>
+        ))}
+        <center className="container col-md-5 col-sm-10">
+          <Button
+            onClick={updateUser}
+            className="mt-4 p-3"
+            color="primary"
+            type="submit"
+            disabled={loading && true}
+          >
+            Update Profile
+          </Button>
+        </center>
+      </form>
+      <div className="d-flex flex-row justify-content-center">
+        <RightContentArea myprofile={true} />
+      </div>
+    </div>
   ) : (
     ""
   );

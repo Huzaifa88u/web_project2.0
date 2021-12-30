@@ -47,6 +47,26 @@ router.get("/getposts/:limit/:page", (req, res) => {
   });
 });
 
+router.get("/myposts/:id/:limit/:page", (req, res) => {
+  const pageOptions = {
+    page: parseInt(req.params.page, 10) || 0,
+    limit: parseInt(req.params.limit, 10) || 10,
+  };
+
+  var query = post
+    .find({ userId: req.params.id })
+    .skip(pageOptions.page * pageOptions.limit)
+    .limit(pageOptions.limit);
+
+  query.exec(function (err, doc) {
+    if (err) {
+      res.status(500).json(err);
+      return;
+    }
+    res.status(200).json(doc);
+  });
+});
+
 router.get("/postcount", (req, res) => {
   post.count({}, function (err, count) {
     res.json({ count: count });
@@ -54,26 +74,11 @@ router.get("/postcount", (req, res) => {
   });
 });
 
-router.get("/getposts", (req, res) => {
-  const x = post.find((err, testData) => {
-    if (err) {
-      res.send(err);
-      console.log(err);
-    } else {
-      res.send(testData);
-    }
-  });
-});
-
-router.get("/myposts/:id", (req, res) => {
-  const x = post.find({ userId: req.body.userId }, (err, testData) => {
-    if (err) {
-      res.send(err);
-      console.log(err);
-    } else {
-      console.log(testData);
-      res.send(testData);
-    }
+router.get("/postcount/:id", (req, res) => {
+  console.log("filered count");
+  post.count({ userId: req.params.id }, function (err, count) {
+    res.json({ count: count });
+    console.log("Number of posts:", count);
   });
 });
 

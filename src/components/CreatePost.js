@@ -17,6 +17,7 @@ export default function CreatePost() {
   const [value_body, setBody] = useState("");
   const [img, setImg] = useState(null);
   const [temp, setTemp] = useState(null);
+  const [err, setErr] = useState(null);
   const query = useQuery();
   const history = useHistory();
 
@@ -25,37 +26,46 @@ export default function CreatePost() {
     let res;
 
     data.append("file", img);
-    console.log(img);
     try {
       res = await axios.post("http://localhost:3000/file/upload", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      return res?.data;
+      return res?.data === "you must select a file." ? null : res?.data;
     } catch (err) {
       console.error(err);
+      return null;
     }
   };
 
   const addPost = async (e) => {
     e.preventDefault();
+    setErr(false);
     // console.log(e);
     const data = await jwtDecode(localStorage.getItem("userid"));
     const imageId = await uploadFile();
-    const post = {
-      userId: data._id,
-      content: value_body,
-      time: Date.now(),
-      likes: 0,
-      imageId: imageId,
-      username: data.name,
-    };
-    console.log("Post:", post);
-    try {
-      await axios.post("http://localhost:3000/posts/createpost", post);
-    } catch (error) {
-      console.log(error);
+    console.log(imageId);
+    console.log(value_body);
+    if (value_body || imageId) {
+      const post = {
+        userId: data._id,
+        content: value_body,
+        time: Date.now(),
+        likes: 0,
+        imageId: imageId,
+        username: data.name,
+      };
+
+      console.log("Post:", post);
+      try {
+        await axios.post("http://localhost:3000/posts/createpost", post);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      setErr(true);
+      console.log(err);
     }
   };
 
@@ -120,6 +130,11 @@ export default function CreatePost() {
             bsSize="md"
           />
           {temp ? <strong> {temp.name} </strong> : ""}
+          {err && (
+            <div class="my-2 alert alert-danger" role="alert">
+              Fail to post
+            </div>
+          )}
         </Col>
         <Col>
           <Button type="submit" color="dark" className="mr-2">

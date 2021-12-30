@@ -16,7 +16,7 @@ conn.once("open", function () {
 });
 
 router.post("/upload", upload.single("file"), async (req, res) => {
-  if (req.file === undefined) return console.log("you must select a file.");
+  if (req.file === undefined) return res.send("you must select a file.");
   console.log("file is not undefined");
   console.log(req.file.toString("base64"));
   // // const imgUrl = `http://localhost:8080/file/${req.file.filename}`;

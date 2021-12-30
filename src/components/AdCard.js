@@ -15,13 +15,15 @@ function useQuery() {
 const AdCard = (props) => {
   const history = useHistory();
   const location = useLocation();
-  const query = useQuery();
+
+  const [contentEdit, setContentEdit] = useState(null);
   const [picture, setPicture] = useState(null);
   const date = new Date(props.data.time);
   const [likes, setLikes] = useState(
     parseInt(props.data.likes ? props.data.likes : 0)
   );
   useEffect(async () => {
+    console.log(props.editable);
     await getImage();
   });
 
@@ -47,33 +49,22 @@ const AdCard = (props) => {
     });
   };
 
-  const handleEdit = () => {
-    const queryParam = qs.parse(location.search);
-    const newQueryParam = {
-      ...queryParam,
-      postid: props.data._id,
-      edit: true,
-    };
-    history.push({
-      pathname: "/editpost",
-      search: qs.stringify(newQueryParam),
-    });
-  };
-
   const handleDelete = async (e) => {
     e.preventDefault();
-    axios
-      .delete(`http://localhost:3000/posts/deletepost/${props.data._id}`)
-      .catch((err) => {
-        console.log(err);
-      })
-      .then((res) => {
-        console.log(res);
-        // history.push({
-        //   pathname: "/posts ",
-        //   search: `?userid=${query.get("userid")}`,
-        // });
-      });
+    try {
+      try {
+        await axios.delete(`http://localhost:3000/file/${props.data.imageId}`);
+      } catch (error) {
+        console.log(error);
+        return;
+      }
+      await axios.delete(
+        `http://localhost:3000/posts/deletepost/${props.data._id}/`
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    window.location.reload();
   };
 
   const handleLike = async (e) => {
@@ -99,13 +90,15 @@ const AdCard = (props) => {
 
   return (
     <div
-      class="shadow p-3 mb-5 bg-white rounded col-12 bg-light"
+      class="shadow p-3 m-3 mb-5 bg-white rounded bg-light"
       style={{ width: "fit-content" }}
     >
       <div className="d-flex flex-column">
         <div className="d-flex flex-column p-0 m-0" onClick={handleClick}>
           <strong>{props.data.username}</strong>
-          <p className="Content">{props.data.content}</p>
+          <p className="Content" contentEditable={contentEdit}>
+            {props.data.content}
+          </p>
           <h6 className="Time">{moment(date.toString()).fromNow()}</h6>
           {picture && (
             <img
@@ -117,12 +110,16 @@ const AdCard = (props) => {
           )}
         </div>
 
-        {props.data.editable ? (
+        {props.editable ? (
           <div className="d-flex flex-row justify-content-between">
-            <Button color="warning" onClick={handleEdit}>
+            <Button
+              color="warning"
+              className="m-1"
+              onClick={() => setContentEdit(true)}
+            >
               Edit
             </Button>
-            <Button color="danger" onClick={handleDelete}>
+            <Button color="danger" className="m-1" onClick={handleDelete}>
               Delete
             </Button>
           </div>

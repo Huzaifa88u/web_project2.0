@@ -31,7 +31,6 @@ app.get("/", (req, res) => {
 app.use("/auth", auth);
 app.use("/posts", posts);
 app.use("/file", upload);
-app.use("/file", upload);
 
 app.listen(port, () => {
   console.log("Connected");

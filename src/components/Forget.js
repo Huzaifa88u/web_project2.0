@@ -36,7 +36,7 @@ const ForgetPassword = (props) => {
         return;
       })
       .then((res) => {
-        console.log(res.data);
+        console.log(res?.data);
         setOTP(res.data);
         setLoading(false);
       });

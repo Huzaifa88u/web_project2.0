@@ -5,18 +5,27 @@ import ls from "local-storage";
 import AdCard from "./AdCard";
 import Pagination from "./Pagination";
 import CreatePost from "./CreatePost";
+import jwtDecode from "jwt-decode";
 
 function useQuery() {
   const { search } = useLocation();
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
-const RightContentArea = () => {
+const RightContentArea = ({ myprofile }) => {
   const [posts, setPosts] = useState([]);
   const query = useQuery();
   const [empty, setEmpty] = useState(false);
   const [page, setPage] = useState(0);
   const [postCount, setPostCount] = useState(1);
   const getPost = async () => {
+    await axios
+      .get("http://localhost:3000/posts/postcount")
+      .catch((err) => {
+        console.log(err);
+      })
+      .then((res) => {
+        setPostCount(res?.data.count);
+      });
     await axios
       .get(`http://localhost:3000/posts/getPosts/${2}/${page}`)
       .catch((err) => {
@@ -30,45 +39,41 @@ const RightContentArea = () => {
   };
 
   const fetchMyPosts = async () => {
-    console.log({ message: ls.get("userid") });
-
+    const user = jwtDecode(ls.get("userid"));
     await axios
-      .get(`http://localhost:3000/posts/myposts/${ls.get("userid")}`)
-      .catch((err) => {
-        console.log(err);
-      })
-      .then((res) => {
-        console.log(res);
-        setEmpty(true);
-        setPosts(res?.data);
-      });
-  };
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/posts/postcount")
+      .get(`http://localhost:3000/posts/postcount/${user._id}`)
       .catch((err) => {
         console.log(err);
       })
       .then((res) => {
         setPostCount(res?.data.count);
       });
-    console.log("getdata");
-    !query.get("myposts") ? getPost() : fetchMyPosts();
+    console.log({ message: user._id });
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/posts/myposts/${user._id}/${2}/${page}`
+      );
+      setPosts(res?.data);
+      setEmpty(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    !myprofile ? getPost() : fetchMyPosts();
     console.log(page);
   }, [page]);
 
   return posts ? (
     <div class="h-100 p-4 border border-black mt-5 d-inline-block col-sm-12 col-md-9 bg-light">
-      <CreatePost />
+      {!myprofile && <CreatePost />}
       <br />
-      {posts?.map((b, i) => (
-        <AdCard
-          data={b}
-          editable={query.get("myposts") ? true : false}
-          key={i}
-        />
-      ))}
+      <div className="d-flex flex-row flex-wrap">
+        {posts?.map((b, i) => (
+          <AdCard data={b} editable={myprofile} key={i} />
+        ))}
+      </div>
       <hr />
       <Pagination postCount={postCount} page={page} setPage={setPage} />
     </div>
