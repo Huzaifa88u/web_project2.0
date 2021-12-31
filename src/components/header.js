@@ -15,6 +15,7 @@ import logo from "../assets/pc_logo.jpg";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import SearchPage from "./SearchBar";
 import FriendsView from "./FriendRequests";
+import FriendRequestTile from "./FriendRequestTile";
 
 function useQuery() {
   const { search } = useLocation();
@@ -25,6 +26,7 @@ export default function Header() {
   const query = useQuery();
   const [modal, setModal] = useState(false);
   const [isOpen, setIsOpen] = useState();
+  const [searchedArr, setSearchedArr] = useState();
   const toggle = () => {
     setIsOpen(!isOpen);
   };
@@ -37,7 +39,7 @@ export default function Header() {
   };
 
   return (
-    <div className="justify-content-between">
+    <div className="d-flex flex-column justify-content-between">
       <Navbar light expand="md" className="container m-0 col">
         <NavbarBrand
           onClick={() =>
@@ -52,33 +54,46 @@ export default function Header() {
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <div className="col-7">
-          <SearchPage />
+          <SearchPage setSearchedArr={setSearchedArr} />
         </div>
-        <Collapse className="col-4" isOpen={isOpen} navbar>
-          <Nav className="ml-auto" navbar>
-            <NavItem style={{ cursor: "pointer" }}>
-              <NavLink>
-                <Link onClick={() => setModal(!modal)}>Friend Requests</Link>
-              </NavLink>
-            </NavItem>
-            <NavItem style={{ cursor: "pointer" }}>
-              <NavLink>
-                <Link to="/editprofile">Edit Profile</Link>
-              </NavLink>
-            </NavItem>
-            <NavItem style={{ cursor: "pointer" }}>
-              <NavLink>
-                <Link to="/friendsview">View Friends</Link>
-              </NavLink>
-            </NavItem>
+        {localStorage.getItem("userid") && (
+          <Collapse className="col-4" isOpen={isOpen} navbar>
+            <Nav className="ml-auto" navbar>
+              <NavItem style={{ cursor: "pointer" }}>
+                <NavLink>
+                  <Link onClick={() => setModal(!modal)}>Friend Requests</Link>
+                </NavLink>
+              </NavItem>
+              <NavItem style={{ cursor: "pointer" }}>
+                <NavLink>
+                  <Link to="/editprofile">Edit Profile</Link>
+                </NavLink>
+              </NavItem>
+              <NavItem style={{ cursor: "pointer" }}>
+                <NavLink>
+                  <Link to="/friendsview">View Friends</Link>
+                </NavLink>
+              </NavItem>
 
-            <NavItem style={{ cursor: "pointer" }}>
-              <NavLink onClick={handleLogout}>Logout</NavLink>
-            </NavItem>
-          </Nav>
-        </Collapse>
+              <NavItem style={{ cursor: "pointer" }}>
+                <NavLink onClick={handleLogout}>Logout</NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        )}
       </Navbar>
       <FriendsView setModal={setModal} modal={modal} />
+
+      <div className="d-flex flex-row flex-wrap">
+        {searchedArr &&
+          searchedArr.map((user) => (
+            <FriendRequestTile
+              search={true}
+              name={user.name}
+              email={user.email}
+            />
+          ))}
+      </div>
     </div>
   );
 }

@@ -128,10 +128,7 @@ export default function EditProfile() {
     <div className="d-flex flex-column">
       <form type="submit" onSubmit={updateUser} className="p-3 mt-3">
         <center className="pb-3">
-          <ProfilePicture
-            image={picture ? picture : "https://picsum.photos/200"}
-            uploadFile={uploadFile}
-          />
+          <ProfilePicture image={picture} uploadFile={uploadFile} />
         </center>
         {editProfile.map((ep, i) => (
           <div className="container col-md-5 col-sm-10">

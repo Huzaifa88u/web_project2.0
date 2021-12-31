@@ -3,7 +3,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Field from "./Field";
 
-const SearchPage = () => {
+const SearchPage = ({ setSearchedArr }) => {
   const [username, setUsername] = useState();
   const [useremail, setUseremail] = useState();
   const history = useHistory();
@@ -12,49 +12,33 @@ const SearchPage = () => {
   };
 
   const handleUserSearch = async (e) => {
+    setSearchedArr(null);
     console.log(e.target.value);
     if (localStorage.getItem("userid")) {
-      await axios
-        .get(`http://localhost:3000/auth/getuser/${e.target.value}`)
-        .catch((err) => {
-          console.log(err);
-        })
-        .then((res) => {
-          console.log(res?.data[0]?.email);
-          setUseremail(res?.data[0]?.email);
-          setUsername(res?.data[0]?.name);
-        });
-    } else {
+      try {
+        const res = await axios.get(
+          `http://localhost:3000/auth/searchuser/${e.target.value}`
+        );
+        console.log(res?.data[0]?.email);
+        setSearchedArr(res?.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
   return (
     <div class="input-group d-flex flex-row justify-content-center">
-      {/* <div class="form-outline pl-5 w-100">
-        <input
-          type="search"
-          id="form1"
-          class="form-control"
-          onChange={handleUserSearch}
-        />
-
-        <label class="form-label" placeholder="Search" for="form1"></label>
-      </div> */}
       <div className="w-100">
-        <Field
-          onChange={handleUserSearch}
-          type="text"
-          id="search"
-          label="Search"
-        />
+        {localStorage.getItem("userid") && (
+          <Field
+            onChange={handleUserSearch}
+            type="text"
+            id="search"
+            label="Search"
+          />
+        )}
       </div>
       <br />
-      <div className="justify-content-between " onClick={handleuserProfile}>
-        <h2>
-          {useremail}
-          <br />
-          {username}
-        </h2>
-      </div>
     </div>
   );
 };

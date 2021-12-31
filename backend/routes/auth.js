@@ -61,6 +61,31 @@ router.get("/getuser/:id", async (req, res) => {
   });
 });
 
+router.get("/searchuser/:text", async (req, res) => {
+  const data = await verifyToken(req, res);
+  // console.log("data:", data);
+  User.aggregate(
+    [
+      {
+        $match: {
+          $or: [
+            { email: { $regex: req.params.text } },
+            { name: { $regex: req.params.text } },
+          ],
+        },
+      },
+    ],
+    (err, user) => {
+      if (err) {
+        res.send(err);
+        console.log(err);
+      } else {
+        res.send(user);
+      }
+    }
+  );
+});
+
 router.put("/changepassword/:email", (req, res) => {
   console.log("req.param.email:", req.params.email);
   console.log("req.body:", req.body);
