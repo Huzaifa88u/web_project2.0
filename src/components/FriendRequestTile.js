@@ -22,7 +22,7 @@ const FriendRequestTile = ({ sender, reciever }) => {
       const res = await axios.get(
         `http://localhost:3000/friendships/checkfriend/${localStorage(
           "userid"
-        )}/${reciever ? reciever.recieverEmail : sender.senderEmail}/sender`
+        )}/${reciever ? reciever.email : sender.senderEmail}/sender`
       );
       console.log("20: ", res.data[0]);
       setSent(res.data[0] ? res.data[0].isFriend : 2);
@@ -39,9 +39,9 @@ const FriendRequestTile = ({ sender, reciever }) => {
         sender: us._id,
         senderEmail: us.email,
         senderName: us.name,
-        reciever: reciever.reciever,
-        recieverEmail: reciever.recieverEmail,
-        recieverName: reciever.recieverName,
+        reciever: reciever._id,
+        recieverEmail: reciever.email,
+        recieverName: reciever.name,
         isFriend: 0,
       };
       const res = await axios.post(
@@ -65,7 +65,7 @@ const FriendRequestTile = ({ sender, reciever }) => {
       const res = await axios.delete(
         `http://localhost:3000/friendships/deletefriend/${localStorage(
           "userid"
-        )}/${reciever.recieverEmail}`
+        )}/${reciever.email}`
       );
       console.log("20: ", res);
       setSent(res.data === "deleted" ? 2 : sent);
@@ -138,10 +138,10 @@ const FriendRequestTile = ({ sender, reciever }) => {
           </div>
           <div className="col-7">
             <Card.Title>
-              {sender ? sender.senderName : reciever.recieverName}
+              {sender ? sender.senderName : reciever.name}
             </Card.Title>
             <Card.Subtitle className="text-muted">
-              {sender ? sender.senderEmail : reciever.recieverEmail}
+              {sender ? sender.senderEmail : reciever.email}
             </Card.Subtitle>
           </div>
           <div className="col-2 p-0 cursor-pointer">

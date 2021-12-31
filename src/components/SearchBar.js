@@ -13,7 +13,7 @@ const SearchPage = ({ setSearchedArr }) => {
 
   const handleUserSearch = async (e) => {
     setSearchedArr(null);
-    console.log(e.target.value);
+    // console.log(e.target.value);
     if (localStorage.getItem("userid")) {
       try {
         const res = await axios.get(
@@ -21,7 +21,7 @@ const SearchPage = ({ setSearchedArr }) => {
             e.target.value
           }/${localStorage.getItem("userid")}`
         );
-        console.log(res?.data[0]?.email);
+        // console.log("res?.data[0]?.email:", res?.data[0]?.email);
         setSearchedArr(res?.data);
       } catch (error) {
         console.log(error);

@@ -56,6 +56,7 @@ export default function Header() {
     if (localStorage.getItem("userid")) countFriendReuqests();
     if (localStorage.getItem("userid"))
       setCurrUser(jwtDecode(localStorage.getItem("userid")));
+    console.log(searchedArr);
   }, []);
 
   return (
