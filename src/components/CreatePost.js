@@ -60,6 +60,9 @@ export default function CreatePost() {
       console.log("Post:", post);
       try {
         await axios.post("http://localhost:3000/posts/createpost", post);
+        setBody("");
+        setImg(null);
+        setTemp(null);
       } catch (error) {
         console.log(error);
       }

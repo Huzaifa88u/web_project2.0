@@ -91,14 +91,17 @@ export default function EditProfile() {
   };
 
   const getUser = async () => {
-    const data = await jwtDecode(localStorage.getItem("userid"));
-    // console.log(data);
-    setName(data?.name);
-    setEmail(data?.email);
-    setPassword(data?.password);
-    setPicture(data?.profilePicId);
-    setPhoneNumber(data?.phonenumber ? data?.phonenumber : "");
-    return data?.profilePicId;
+    const res = await axios.get(
+      `http://localhost:3000/auth/getuser/${localStorage.getItem("userid")}`
+    );
+
+    console.log(res.data);
+    setName(res.data?.name);
+    setEmail(res.data?.email);
+    setPassword(res.data?.password);
+    setPicture(res.data?.profilePicId);
+    setPhoneNumber(res.data?.phonenumber ? res.data?.phonenumber : "");
+    return res.data?.profilePicId;
   };
 
   const getProfileImage = async (res) => {

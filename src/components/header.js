@@ -16,6 +16,7 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 import SearchPage from "./SearchBar";
 import FriendsView from "./FriendRequests";
 import FriendRequestTile from "./FriendRequestTile";
+import axios from "axios";
 
 function useQuery() {
   const { search } = useLocation();
@@ -28,6 +29,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState();
   const [searchedArr, setSearchedArr] = useState();
   const [currUser, setCurrUser] = useState();
+  const [requestCount, setRequestCount] = useState(0);
   const toggle = () => {
     setIsOpen(!isOpen);
   };
@@ -39,8 +41,21 @@ export default function Header() {
     history.push("/login");
   };
 
+  const countFriendReuqests = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/friendships/count/${localStorage.getItem(
+          "userid"
+        )}`
+      );
+      setRequestCount(res?.data.count);
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    setCurrUser(jwtDecode(localStorage.getItem("userid")));
+    if (localStorage.getItem("userid")) countFriendReuqests();
+    if (localStorage.getItem("userid"))
+      setCurrUser(jwtDecode(localStorage.getItem("userid")));
   }, []);
 
   return (
@@ -66,7 +81,18 @@ export default function Header() {
             <Nav className="ml-auto" navbar>
               <NavItem style={{ cursor: "pointer" }}>
                 <NavLink>
-                  <Link onClick={() => setModal(!modal)}>Friend Requests</Link>
+                  <Link onClick={() => setModal(!modal)}>
+                    Friend Requests
+                    {requestCount ? (
+                      <sup>
+                        <span class="badge badge-pill badge-danger p-2 m-1">
+                          {requestCount}
+                        </span>
+                      </sup>
+                    ) : (
+                      ""
+                    )}
+                  </Link>
                 </NavLink>
               </NavItem>
               <NavItem style={{ cursor: "pointer" }}>
@@ -95,12 +121,7 @@ export default function Header() {
             {
               return (
                 currUser.email !== user.email && (
-                  <FriendRequestTile
-                    search={true}
-                    name={user.name}
-                    email={user.email}
-                    id={user._id}
-                  />
+                  <FriendRequestTile search={true} reciever={user} />
                 )
               );
             }

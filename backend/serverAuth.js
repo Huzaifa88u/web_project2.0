@@ -21,7 +21,7 @@ function verifyToken(req, res, next) {
   // otherwise, try to verify token
   jwt.verify(token, "secret", (err, decodedData) => {
     // if problem with token verification, deny access
-    // console.log("checking");
+    console.log("checking");
 
     if (err) return { success: false, message: "Invalid token." };
     // console.log("id:", decodedData._id);
