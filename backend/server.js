@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 var auth = require("./routes/auth");
 var posts = require("./routes/posts");
 var upload = require("./routes/upload");
+var friendships = require("./routes/friendships");
 const Grid = require("gridfs-stream");
 const port = 3000;
 const app = express();
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", auth);
 app.use("/posts", posts);
+app.use("/friendships", friendships);
 app.use("/file", upload);
 
 app.listen(port, () => {

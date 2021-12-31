@@ -5,13 +5,31 @@ const Friendship = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+
+  senderEmail: {
+    type: String,
+  },
+
+  senderName: {
+    type: String,
+  },
+
   reciever: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+
+  recieverEmail: {
+    type: String,
+  },
+
+  recieverName: {
+    type: String,
+  },
+
   isFriend: {
     type: Number,
   },
 });
 
-module.exports = mongoose.model("Friendships", Friendship);
+module.exports = mongoose.model("Friendship", Friendship);

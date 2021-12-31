@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Avatar } from "@mui/material";
+import jwtDecode from "jwt-decode";
 
 import {
   Collapse,
@@ -11,7 +12,6 @@ import {
   NavLink,
 } from "reactstrap";
 import logo from "../assets/pc_logo.jpg";
-
 import { Link, useHistory, useLocation } from "react-router-dom";
 import SearchPage from "./SearchBar";
 import FriendsView from "./FriendRequests";
@@ -27,6 +27,7 @@ export default function Header() {
   const [modal, setModal] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const [searchedArr, setSearchedArr] = useState();
+  const [currUser, setCurrUser] = useState();
   const toggle = () => {
     setIsOpen(!isOpen);
   };
@@ -37,6 +38,10 @@ export default function Header() {
     localStorage.removeItem("userid");
     history.push("/login");
   };
+
+  useEffect(() => {
+    setCurrUser(jwtDecode(localStorage.getItem("userid")));
+  }, []);
 
   return (
     <div className="d-flex flex-column justify-content-between">
@@ -86,13 +91,20 @@ export default function Header() {
 
       <div className="d-flex flex-row flex-wrap">
         {searchedArr &&
-          searchedArr.map((user) => (
-            <FriendRequestTile
-              search={true}
-              name={user.name}
-              email={user.email}
-            />
-          ))}
+          searchedArr?.map((user) => {
+            {
+              return (
+                currUser.email !== user.email && (
+                  <FriendRequestTile
+                    search={true}
+                    name={user.name}
+                    email={user.email}
+                    id={user._id}
+                  />
+                )
+              );
+            }
+          })}
       </div>
     </div>
   );

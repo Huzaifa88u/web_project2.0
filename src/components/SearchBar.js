@@ -17,7 +17,9 @@ const SearchPage = ({ setSearchedArr }) => {
     if (localStorage.getItem("userid")) {
       try {
         const res = await axios.get(
-          `http://localhost:3000/auth/searchuser/${e.target.value}`
+          `http://localhost:3000/auth/searchuser/${
+            e.target.value
+          }/${localStorage.getItem("userid")}`
         );
         console.log(res?.data[0]?.email);
         setSearchedArr(res?.data);

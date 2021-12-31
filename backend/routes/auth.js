@@ -33,7 +33,7 @@ router.post("/createuser", (req, res) => {
 
 router.put("/edituser/:id", (req, res) => {
   User.findByIdAndUpdate(
-    { _id: verifyToken(req, res) },
+    { _id: verifyToken(req, res).data },
     req.body,
     (err, testData) => {
       if (err) {
@@ -50,8 +50,9 @@ router.put("/edituser/:id", (req, res) => {
 
 router.get("/getuser/:id", async (req, res) => {
   const data = await verifyToken(req, res);
+  if (!data.success) return;
   // console.log("data:", data);
-  User.findById({ _id: data }, (err, user) => {
+  User.findById({ _id: data.data }, (err, user) => {
     if (err) {
       res.send(err);
       console.log(err);
@@ -61,9 +62,10 @@ router.get("/getuser/:id", async (req, res) => {
   });
 });
 
-router.get("/searchuser/:text", async (req, res) => {
+router.get("/searchuser/:text/:id", async (req, res) => {
   const data = await verifyToken(req, res);
-  // console.log("data:", data);
+  console.log("data:", data);
+  if (!data.success) return res.send({ message: "Unauthorized" });
   User.aggregate(
     [
       {

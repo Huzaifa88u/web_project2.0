@@ -28,7 +28,7 @@ function verifyToken(req, res, next) {
     // otherwise, search for user by id that was embedded in token
     id = decodedData._id;
   });
-  return id;
+  return { success: true, data: id };
 }
 
 module.exports = {
