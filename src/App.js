@@ -14,6 +14,7 @@ import FriendRequests from "./components/FriendRequests";
 import EditProfile from "./components/EditProfile";
 import UserProfile from "./components/UserProfile";
 import ForgetPassword from "./components/Forget";
+import ViewProfile from "./components/viewProfile";
 
 function App() {
   return (
@@ -55,6 +56,9 @@ function App() {
         </Route>
         <Route path="/friendrequests">
           <FriendRequests />
+        </Route>
+        <Route path="/viewprofile">
+          <ViewProfile />
         </Route>
         <Route path="/editprofile">
           <EditProfile />

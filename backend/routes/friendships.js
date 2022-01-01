@@ -99,13 +99,13 @@ router.get("/checkfriend/:id/:email/:sender", async (req, res) => {
   }
 });
 
-router.delete("/deletefriend/:id/:reciever", async (req, res) => {
+router.delete("/deletefriend/:id/:sender", async (req, res) => {
   const data = await verifyToken(req, res);
   if (!data.success) return;
   console.log("req.params.reciever", req.params.reciever);
   Friendship.findOneAndDelete(
     {
-      $and: [{ recieverEmail: req.params.reciever }, { sender: data.data }],
+      $and: [{ reciever: data.data }, { senderEmail: req.params.sender }],
     },
     (err, deleted) => {
       if (err) {

@@ -7,17 +7,46 @@ import Pagination from "./Pagination";
 import CreatePost from "./CreatePost";
 import jwtDecode from "jwt-decode";
 
+const Cryptr = require("cryptr");
+const cryptr = new Cryptr("myTotalySecretKey");
+
 function useQuery() {
   const { search } = useLocation();
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
-const RightContentArea = ({ myprofile }) => {
+const RightContentArea = ({ myprofile, userProfile, viewuserId }) => {
   const [posts, setPosts] = useState([]);
   const query = useQuery();
   const [empty, setEmpty] = useState(false);
   const [page, setPage] = useState(0);
   const [postCount, setPostCount] = useState(1);
   const getPost = async () => {
+    let friendsres;
+    const friends = [];
+    const user = jwtDecode(ls.get("userid"));
+
+    try {
+      friendsres = await axios.get(
+        `http://localhost:3000/friendships/getUserFriends/${localStorage.getItem(
+          "userid"
+        )}`
+      );
+      console.log(friendsres.data.requests);
+      friends.push(0);
+      for (let i = 0; i < friendsres.length; i++) {
+        friends.push(
+          friendsres[i].sender === user._id
+            ? friendsres[i].sender
+            : friendsres[i].sender
+        );
+      }
+      // friendsres.data.requests.map((f) => friends.push(1));
+      const encryptedString = cryptr.encrypt(friends);
+
+      console.log("friends:", encryptedString);
+    } catch (error) {
+      console.log(error);
+    }
     await axios
       .get("http://localhost:3000/posts/postcount")
       .catch((err) => {
@@ -27,7 +56,7 @@ const RightContentArea = ({ myprofile }) => {
         setPostCount(res?.data.count);
       });
     await axios
-      .get(`http://localhost:3000/posts/getPosts/${2}/${page}`)
+      .get(`http://localhost:3000/posts/getPosts/${3}/${page}`)
       .catch((err) => {
         console.log(err);
       })
@@ -60,9 +89,29 @@ const RightContentArea = ({ myprofile }) => {
     }
   };
 
+  const fetchUserPosts = async () => {
+    await axios
+      .get(`http://localhost:3000/posts/friendpostcount/${viewuserId}`)
+      .catch((err) => {
+        console.log(err);
+      })
+      .then((res) => {
+        setPostCount(res?.data.count);
+      });
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/posts/myposts/${viewuserId}/${2}/${page}`
+      );
+      setPosts(res?.data);
+      setEmpty(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     !myprofile ? getPost() : fetchMyPosts();
-    console.log(page);
+    // console.log(page);
   }, [page]);
 
   return posts ? (

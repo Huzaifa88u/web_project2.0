@@ -74,6 +74,13 @@ router.get("/postcount", (req, res) => {
   });
 });
 
+router.get("/friendpostcount/:email", (req, res) => {
+  post.count({ userId: req.params.email }, function (err, count) {
+    res.json({ count: count });
+    console.log("Number of posts:", count);
+  });
+});
+
 router.get("/postcount/:id", (req, res) => {
   console.log("filered count");
   post.count({ userId: req.params.id }, function (err, count) {

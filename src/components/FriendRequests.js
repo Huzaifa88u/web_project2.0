@@ -33,30 +33,35 @@ const FriendsView = ({ isFriend, modal, setModal }) => {
         )}`
       );
       console.log(res.data?.requests);
-      setFriendsArr(res.data?.requests);
+      setFriendsArr(res.data ? res.data.requests : null);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
+    console.log("fetch: ", modal);
     if (isFriend && modal) {
       getFriends();
-    }
-    console.log("fetch: ", modal);
-    if (modal) getFriendRequsts();
+    } else if (modal) getFriendRequsts();
   }, [modal]);
 
   return (
     <div>
       <Modal isOpen={modal} toggle={() => setModal(!modal)}>
         <ModalHeader toggle={() => setModal(!modal)}>
-          Friend Requests
+          {isFriend ? "Friend Requests" : "My Friends"}
         </ModalHeader>
         <ModalBody>
           {requestArr &&
             requestArr.map((ra) => <FriendRequestTile sender={ra} />)}
           {friendsArr &&
-            friendsArr.map((ra) => <FriendRequestTile sender={ra} />)}
+            friendsArr.map((ra) =>
+              ra.isFriend === 1 ? (
+                <FriendRequestTile check={true} sender={ra} />
+              ) : (
+                ""
+              )
+            )}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={() => setModal(!modal)}>

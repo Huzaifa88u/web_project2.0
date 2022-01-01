@@ -9,16 +9,18 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import localStorage from "local-storage";
+import { useHistory } from "react-router-dom";
 import { IconButton } from "@mui/material";
-import { Button } from "reactstrap";
+import ViewProfile from "./viewProfile";
 
-const FriendRequestTile = ({ sender, reciever }) => {
+const FriendRequestTile = ({ sender, reciever, check }) => {
   const [sent, setSent] = useState(2);
   const [showBtn, setShowBtn] = useState(sender?.isFriend ? 0 : 1);
+  const us = jwtDecode(localStorage("userid"));
 
   const checkFriend = async () => {
+    console.log("cehck");
     try {
-      const us = jwtDecode(localStorage("userid"));
       const res = await axios.get(
         `http://localhost:3000/friendships/checkfriend/${localStorage(
           "userid"
@@ -34,7 +36,6 @@ const FriendRequestTile = ({ sender, reciever }) => {
   const sendRequest = async (e) => {
     e.preventDefault();
     try {
-      const us = jwtDecode(localStorage("userid"));
       const friendObj = {
         sender: us._id,
         senderEmail: us.email,
@@ -61,11 +62,10 @@ const FriendRequestTile = ({ sender, reciever }) => {
     e.preventDefault();
     alert("Are you sure you want to delete this friend?");
     try {
-      const us = jwtDecode(localStorage("userid"));
       const res = await axios.delete(
         `http://localhost:3000/friendships/deletefriend/${localStorage(
           "userid"
-        )}/${reciever ? reciever.email : sender.senderEmail}`
+        )}/${sender.senderEmail}`
       );
       console.log("20: ", res);
       setSent(res.data === "deleted" ? 2 : sent);
@@ -77,7 +77,6 @@ const FriendRequestTile = ({ sender, reciever }) => {
   const handleAccept = async (e) => {
     e.preventDefault();
     try {
-      const us = jwtDecode(localStorage("userid"));
       const accepted = {
         sender: sender.sender,
         senderEmail: sender.senderEmail,
@@ -105,7 +104,6 @@ const FriendRequestTile = ({ sender, reciever }) => {
     e.preventDefault();
     alert("Are you sure you want to delete this friend?");
     try {
-      const us = jwtDecode(localStorage("userid"));
       const res = await axios.delete(
         `http://localhost:3000/friendships/declinerequest/${localStorage(
           "userid"
@@ -137,14 +135,33 @@ const FriendRequestTile = ({ sender, reciever }) => {
               round="50px"
             />
           </div>
-          <div className="col-7">
-            <Card.Title>
-              {sender ? sender.senderName : reciever.name}
-            </Card.Title>
-            <Card.Subtitle className="text-muted">
-              {sender ? sender.senderEmail : reciever.email}
-            </Card.Subtitle>
-          </div>
+          {!check ? (
+            <div className="col-7">
+              <Card.Title>
+                <a onClick={<ViewProfile viewuserId={sender} />}>
+                  {sender ? sender.senderName : reciever.name}
+                </a>
+              </Card.Title>
+              <Card.Subtitle className="text-muted">
+                {sender ? sender.senderEmail : reciever.email}
+              </Card.Subtitle>
+            </div>
+          ) : (
+            <div className="col-7">
+              <Card.Title>
+                <a onClick={() => <ViewProfile viewuserId={sender} />}>
+                  {sender.sender !== us._id
+                    ? sender.senderName
+                    : sender.recieverName}
+                </a>
+              </Card.Title>
+              <Card.Subtitle className="text-muted">
+                {sender.sender !== us._id
+                  ? sender.senderEmail
+                  : sender.recieverEmail}
+              </Card.Subtitle>
+            </div>
+          )}
           <div className="col-2 p-0 cursor-pointer">
             <a>
               {!sender ? (

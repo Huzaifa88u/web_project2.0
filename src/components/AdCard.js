@@ -24,7 +24,8 @@ const AdCard = (props) => {
     parseInt(props.data.likes ? props.data.likes : 0)
   );
   useEffect(async () => {
-    console.log(content);
+    // console.log(content);
+    setContent(props.data.content);
     await getImage();
   });
 
@@ -77,7 +78,7 @@ const AdCard = (props) => {
         console.log(err);
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setLikes(likes + 1);
       });
   };
@@ -86,7 +87,7 @@ const AdCard = (props) => {
     e.preventDefault();
     let dataa = { ...props.data, content: content };
     try {
-      console.log("handleUpdate");
+      console.log("handleUpdate:", props.data._id);
       await axios.put(
         `http://localhost:3000/posts/editPost/${props.data._id}`,
         dataa
@@ -130,6 +131,7 @@ const AdCard = (props) => {
               color="warning"
               className="m-1"
               onClick={(e) => {
+                setContent(e.target.value);
                 e.preventDefault();
                 console.log(contentEdit);
                 if (contentEdit) {

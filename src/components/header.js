@@ -25,6 +25,9 @@ function useQuery() {
 
 export default function Header() {
   const query = useQuery();
+  const us = localStorage.getItem("userid")
+    ? jwtDecode(localStorage.getItem("userid"))
+    : "";
   const [modal, setModal] = useState(false);
   const [fVModal, setFVModal] = useState(false);
   const [isOpen, setIsOpen] = useState();
@@ -39,6 +42,12 @@ export default function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem("userid");
+    setModal(false);
+    setFVModal(false);
+    setSearchedArr(null);
+    setCurrUser(null);
+    setRequestCount(null);
+    setIsOpen(null);
     history.push("/login");
   };
 
@@ -73,6 +82,7 @@ export default function Header() {
           style={{ cursor: "pointer" }}
         >
           <Avatar src={logo} sx={{ width: 50, height: 50 }} />
+          <p>{us.name}</p>
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <div className="col-7">
