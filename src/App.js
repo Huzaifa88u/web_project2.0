@@ -11,7 +11,6 @@ import ReadPost from "./components/postRead";
 import RightContentArea from "./components/RightContentArea";
 import ls from "localStorage";
 import FriendRequests from "./components/FriendRequests";
-import FriendsView from "./components/FriendsView";
 import EditProfile from "./components/EditProfile";
 import UserProfile from "./components/UserProfile";
 import ForgetPassword from "./components/Forget";
@@ -59,9 +58,6 @@ function App() {
         </Route>
         <Route path="/editprofile">
           <EditProfile />
-        </Route>
-        <Route path="/friendsview">
-          <FriendsView />
         </Route>
         <Route path="/userprofile">
           <UserProfile />

@@ -26,6 +26,7 @@ function useQuery() {
 export default function Header() {
   const query = useQuery();
   const [modal, setModal] = useState(false);
+  const [fVModal, setFVModal] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const [searchedArr, setSearchedArr] = useState();
   const [currUser, setCurrUser] = useState();
@@ -103,7 +104,7 @@ export default function Header() {
               </NavItem>
               <NavItem style={{ cursor: "pointer" }}>
                 <NavLink>
-                  <Link to="/friendsview">View Friends</Link>
+                  <Link onClick={() => setFVModal(!fVModal)}>View Friends</Link>
                 </NavLink>
               </NavItem>
 
@@ -115,6 +116,7 @@ export default function Header() {
         )}
       </Navbar>
       <FriendsView setModal={setModal} modal={modal} />
+      <FriendsView isFriend={true} setModal={setFVModal} modal={fVModal} />
 
       <div className="d-flex flex-row flex-wrap">
         {searchedArr &&

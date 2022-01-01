@@ -17,6 +17,23 @@ router.get("/getUserRequests/:id", async (req, res) => {
   );
 });
 
+router.get("/getUserFriends/:id", async (req, res) => {
+  const data = await verifyToken(req, res);
+  console.log("data.data:", data);
+  Friendship.find(
+    {
+      $and: [
+        { $or: [{ reciever: data.data }, { sender: data.data }] },
+        { isFriend: 1 },
+      ],
+    },
+    function (err, reqArr) {
+      res.json({ requests: reqArr });
+      console.log("requests:", reqArr);
+    }
+  );
+});
+
 router.post("/sendrequest/:id", async (req, res) => {
   const data = await verifyToken(req, res);
   if (!data.success) return;

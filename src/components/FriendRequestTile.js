@@ -14,7 +14,7 @@ import { Button } from "reactstrap";
 
 const FriendRequestTile = ({ sender, reciever }) => {
   const [sent, setSent] = useState(2);
-  const [showBtn, setShowBtn] = useState(1);
+  const [showBtn, setShowBtn] = useState(sender?.isFriend ? 0 : 1);
 
   const checkFriend = async () => {
     try {
@@ -65,7 +65,7 @@ const FriendRequestTile = ({ sender, reciever }) => {
       const res = await axios.delete(
         `http://localhost:3000/friendships/deletefriend/${localStorage(
           "userid"
-        )}/${reciever.email}`
+        )}/${reciever ? reciever.email : sender.senderEmail}`
       );
       console.log("20: ", res);
       setSent(res.data === "deleted" ? 2 : sent);
@@ -121,6 +121,7 @@ const FriendRequestTile = ({ sender, reciever }) => {
 
   useEffect(async () => {
     console.log(sender);
+    console.log(showBtn);
     await checkFriend();
   }, []);
 
